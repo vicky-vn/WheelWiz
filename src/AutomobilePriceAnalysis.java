@@ -29,26 +29,42 @@ public class AutomobilePriceAnalysis {
         PrintStatements.statementCall(PrintStatements.contactDetailsRequest);
         // Extract the mail and number
         // Validate the mail and number
-        contactDetails = input.nextLine();
+        boolean isEmailValid = false;
+        boolean isPhoneNumberValid = false;
 
-        // Extract the email and phone number
-        email = DataExtraction.extractEmail(contactDetails);
-        phoneNumber = DataExtraction.extractPhoneNumber(contactDetails);
+        while (!isEmailValid || !isPhoneNumberValid) {
+            PrintStatements.statementCall(PrintStatements.contactDetailsRequest);
+            contactDetails = input.nextLine();
 
-        // Validate the email and phone number
-        boolean isEmailValid = DataExtraction.validateEmail(email);
-        boolean isPhoneNumberValid = DataExtraction.validatePhoneNumber(phoneNumber);
+            // Extract the email and phone number
+            email = DataExtraction.extractEmail(contactDetails);
+            phoneNumber = DataExtraction.extractPhoneNumber(contactDetails);
 
-        // Output the results based on validation
-        if (isEmailValid && isPhoneNumberValid) {
-            System.out.println("Thanks for the mail ID and phone number, Quotation will be sent to this mail ID: " + email);
-        } else if (!isEmailValid && !isPhoneNumberValid) {
-            System.out.println("Enter valid phone number and email");
-        } else if (!isEmailValid) {
-            System.out.println("Enter valid email ID");
-        } else if (!isPhoneNumberValid) {
-            System.out.println("Enter valid phone number");
+            // Check if email and phone number were found
+            if (email == null) {
+                System.out.println("No valid email found in the input.");
+            }
+            if (phoneNumber == null) {
+                System.out.println("No valid phone number found in the input.");
+            }
+
+            // Validate the email and phone number if they are not null
+            isEmailValid = email != null && DataExtraction.validateEmail(email);
+            isPhoneNumberValid = phoneNumber != null && DataExtraction.validatePhoneNumber(phoneNumber);
+
+            // Output the results based on validation
+            if (!isEmailValid && !isPhoneNumberValid) {
+                System.out.println("Enter valid phone number and email");
+            } else if (!isEmailValid) {
+                System.out.println("Enter valid email ID");
+            } else if (!isPhoneNumberValid) {
+                System.out.println("Enter valid phone number");
+            }
+            else if (isPhoneNumberValid && isPhoneNumberValid ) {
+                System.out.println("Thanks for the mail ID and phone number, Quotation will be sent to this mail ID: " + email);
+            }
         }
+
 
         PrintStatements.statementCall(PrintStatements.maxBudgetRequest);
         // Page ranking here
