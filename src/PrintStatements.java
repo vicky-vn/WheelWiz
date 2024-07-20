@@ -1,5 +1,8 @@
 public class PrintStatements {
 
+    static String Trendingcars = "Here are our trending cars available in our website!";
+
+
     static String welcomeMsg = "Welcome! We will help you find the right car\nPlease provide the following details to get started\n";
 
     static String firstNameRequest = "Please enter your first name";

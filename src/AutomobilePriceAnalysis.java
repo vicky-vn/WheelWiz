@@ -14,6 +14,9 @@ public class AutomobilePriceAnalysis {
 
         PrintStatements.statementCall(PrintStatements.welcomeMsg);
 
+        PrintStatements.statementCall(PrintStatements.Trendingcars);
+        //Frequency count function will be called your
+
         PrintStatements.statementCall(PrintStatements.firstNameRequest);
         firstName = input.nextLine();
 
