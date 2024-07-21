@@ -3,7 +3,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class DataExtraction {
+public class DataExtractionAndValidation {
 
     // Method to extract email from text
     public static String extractEmail(String text) {
@@ -43,6 +43,14 @@ public class DataExtraction {
         return matcher.matches();
     }
 
+    // Method to validate firstName & lastName
+    public static boolean validateNames(String name) {
+        String nameRegex = "^[\\p{L} ]+$";
+        Pattern pattern = Pattern.compile(nameRegex);
+        Matcher matcher = pattern.matcher(name);
+        return matcher.matches();
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -61,14 +69,11 @@ public class DataExtraction {
         // Output the results based on validation
         if (isEmailValid && isPhoneNumberValid) {
             System.out.println("Thanks for the mail ID and phone number, Quotation will be sent to this mail ID: " + email);
-        } else if (!isEmailValid && !isPhoneNumberValid) {
-            System.out.println("Enter valid phone number and email");
         } else if (!isEmailValid) {
             System.out.println("Enter valid email ID");
         } else if (!isPhoneNumberValid) {
             System.out.println("Enter valid phone number");
         }
-
         scanner.close();
     }
 }

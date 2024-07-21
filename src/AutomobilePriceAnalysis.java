@@ -6,79 +6,105 @@ public class AutomobilePriceAnalysis {
 
         Scanner input = new Scanner(System.in);
 
-        String firstName, lastName, email,contactDetails, phoneNumber;
+        String firstName = "";
+        String lastName = "";
+        String contactDetails, email, phoneNumber;
 
-        int maxBudget, mobileNumber;
+        boolean isUserChoice = false;
 
-        FancyASCII.asciiPrint();
+        int userChoice, maxBudget;
 
-        PrintStatements.statementCall(PrintStatements.welcomeMsg);
+        while(!isUserChoice) {
 
-        PrintStatements.statementCall(PrintStatements.Trendingcars);
-        //Frequency count function will be called your
+            boolean isFirstNameValid = false;
+            boolean isLastNameValid = false;
+            boolean isEmailValid = false;
+            boolean isPhoneNumberValid = false;
 
-        PrintStatements.statementCall(PrintStatements.firstNameRequest);
-        firstName = input.nextLine();
-        // Name data validation should be called here
+            //FancyASCII.asciiPrint();
 
-        PrintStatements.statementCall(PrintStatements.lastNameRequest);
-        lastName = input.nextLine();
-        // Last name data validation should be called here
+            PrintStatements.statementCall(PrintStatements.welcomeMsg);
 
+            PrintStatements.statementCall(PrintStatements.trendingCars);
+            //Frequency count function will be called your
 
-        PrintStatements.statementCall(PrintStatements.contactDetailsRequest);
-        // Extract the mail and number
-        // Validate the mail and number
-        boolean isEmailValid = false;
-        boolean isPhoneNumberValid = false;
+            PrintStatements.statementCall(PrintStatements.firstNameRequest);
+            // First Name validation
+            while (!isFirstNameValid) {
+                firstName = input.nextLine();
 
-        while (!isEmailValid || !isPhoneNumberValid) {
-            PrintStatements.statementCall(PrintStatements.contactDetailsRequest);
-            contactDetails = input.nextLine();
-
-            // Extract the email and phone number
-            email = DataExtraction.extractEmail(contactDetails);
-            phoneNumber = DataExtraction.extractPhoneNumber(contactDetails);
-
-            // Check if email and phone number were found
-            if (email == null) {
-                System.out.println("No valid email found in the input.");
-            }
-            if (phoneNumber == null) {
-                System.out.println("No valid phone number found in the input.");
+                isFirstNameValid = firstName != null && DataExtractionAndValidation.validateNames(firstName);
             }
 
-            // Validate the email and phone number if they are not null
-            isEmailValid = email != null && DataExtraction.validateEmail(email);
-            isPhoneNumberValid = phoneNumber != null && DataExtraction.validatePhoneNumber(phoneNumber);
+            PrintStatements.statementCall(PrintStatements.lastNameRequest);
+            // Last Name validation
+            while (!isLastNameValid) {
+                lastName = input.nextLine();
 
-            // Output the results based on validation
-            if (!isEmailValid && !isPhoneNumberValid) {
-                System.out.println("Enter valid phone number and email");
-            } else if (!isEmailValid) {
-                System.out.println("Enter valid email ID");
-            } else if (!isPhoneNumberValid) {
-                System.out.println("Enter valid phone number");
+                if (lastName == null) {
+                    PrintStatements.statementCall(PrintStatements.lastNameRequest);
+                }
+
+                isLastNameValid = lastName != null && DataExtractionAndValidation.validateNames(lastName);
             }
-            else if (isPhoneNumberValid && isPhoneNumberValid ) {
-                System.out.println("Thanks for the mail ID and phone number, Quotation will be sent to this mail ID: " + email);
+
+            // Extracting mail, phone and validating it
+            while (!isEmailValid || !isPhoneNumberValid) {
+                PrintStatements.statementCall(PrintStatements.contactDetailsRequest);
+                contactDetails = input.nextLine();
+
+                // Extract the email and phone number
+                email = DataExtractionAndValidation.extractEmail(contactDetails);
+                phoneNumber = DataExtractionAndValidation.extractPhoneNumber(contactDetails);
+
+                // Check if email and phone number were found
+                if (email == null) {
+                    PrintStatements.statementCall(PrintStatements.invalidEmail);
+                }
+                if (phoneNumber == null) {
+                    PrintStatements.statementCall(PrintStatements.invalidPhone);
+                }
+
+                // Validate the email and phone number if they are not null
+                isEmailValid = email != null && DataExtractionAndValidation.validateEmail(email);
+                isPhoneNumberValid = phoneNumber != null && DataExtractionAndValidation.validatePhoneNumber(phoneNumber);
+
+                // Output the results based on validation
+                if (isEmailValid && isPhoneNumberValid) {
+                    System.out.println("Thanks! Contact details received\nE-mail ID: " + email + "\nMobile Number: " + phoneNumber);
+                }
+            }
+
+            PrintStatements.statementCall(PrintStatements.maxBudgetRequest);
+            // Page ranking here
+
+            PrintStatements.statementCall(PrintStatements.carCategoryRequest);
+            // Word Completion here
+
+            PrintStatements.statementCall(PrintStatements.carBrandRequest);
+            // Spell check here
+
+            System.out.println("Details generated for " + firstName + " " + lastName);
+
+            PrintStatements.statementCall(PrintStatements.lastStatement);
+
+            userChoice = input.nextInt();
+
+            while(true) {
+                if (userChoice == 0) {
+                    isUserChoice = true;
+                    break;
+                } else if (userChoice == 1) {
+                    isUserChoice = false;
+                    break;
+                } else {
+                    PrintStatements.statementCall(PrintStatements.invalidEntry);
+                    PrintStatements.statementCall(PrintStatements.lastStatement);
+                    userChoice = input.nextInt();
+                    input.nextLine();
+                }
             }
         }
-
-
-        PrintStatements.statementCall(PrintStatements.maxBudgetRequest);
-        // Page ranking here
-
-        PrintStatements.statementCall(PrintStatements.carCategoryRequest);
-        // Word Completion here
-
-        PrintStatements.statementCall(PrintStatements.carBrandRequest);
-        // Spell check here
-
-        System.out.println("Details generated for " + firstName + " " + lastName);
-
-        PrintStatements.statementCall(PrintStatements.lastStatement);
-
-
+        input.close();
     }
 }
