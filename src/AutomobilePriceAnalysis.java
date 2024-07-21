@@ -26,26 +26,31 @@ public class AutomobilePriceAnalysis {
             PrintStatements.statementCall(PrintStatements.welcomeMsg);
 
             PrintStatements.statementCall(PrintStatements.trendingCars);
+
+            PrintStatements.statementCall(PrintStatements.welcomeMsg2);
+
             //Frequency count function will be called your
 
             PrintStatements.statementCall(PrintStatements.firstNameRequest);
             // First Name validation
             while (!isFirstNameValid) {
-                firstName = input.nextLine();
-
-                isFirstNameValid = firstName != null && DataExtractionAndValidation.validateNames(firstName);
+                firstName = input.nextLine().trim();
+                if (!firstName.isEmpty() && DataExtractionAndValidation.validateNames(firstName)) {
+                    isFirstNameValid = true;
+                } else {
+                    PrintStatements.statementCall(PrintStatements.firstNameRequest);
+                }
             }
 
             PrintStatements.statementCall(PrintStatements.lastNameRequest);
             // Last Name validation
             while (!isLastNameValid) {
-                lastName = input.nextLine();
-
-                if (lastName == null) {
+                lastName = input.nextLine().trim();
+                if (!lastName.isEmpty() && DataExtractionAndValidation.validateNames(lastName)) {
+                    isLastNameValid = true;
+                } else {
                     PrintStatements.statementCall(PrintStatements.lastNameRequest);
                 }
-
-                isLastNameValid = lastName != null && DataExtractionAndValidation.validateNames(lastName);
             }
 
             // Extracting mail, phone and validating it
@@ -95,7 +100,6 @@ public class AutomobilePriceAnalysis {
                     isUserChoice = true;
                     break;
                 } else if (userChoice == 1) {
-                    isUserChoice = false;
                     break;
                 } else {
                     PrintStatements.statementCall(PrintStatements.invalidEntry);
