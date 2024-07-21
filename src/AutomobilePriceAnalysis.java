@@ -8,7 +8,9 @@ public class AutomobilePriceAnalysis {
 
         String firstName = "";
         String lastName = "";
-        String contactDetails, email, phoneNumber;
+        String email="";
+        String phoneNumber="";
+        String contactDetails;
 
         boolean isUserChoice = false;
 
@@ -73,11 +75,6 @@ public class AutomobilePriceAnalysis {
                 // Validate the email and phone number if they are not null
                 isEmailValid = email != null && DataExtractionAndValidation.validateEmail(email);
                 isPhoneNumberValid = phoneNumber != null && DataExtractionAndValidation.validatePhoneNumber(phoneNumber);
-
-                // Output the results based on validation
-                if (isEmailValid && isPhoneNumberValid) {
-                    System.out.println("Thanks! Contact details received\nE-mail ID: " + email + "\nMobile Number: " + phoneNumber);
-                }
             }
 
             PrintStatements.statementCall(PrintStatements.maxBudgetRequest);
@@ -89,7 +86,8 @@ public class AutomobilePriceAnalysis {
             PrintStatements.statementCall(PrintStatements.carBrandRequest);
             // Spell check here
 
-            System.out.println("Details generated for " + firstName + " " + lastName);
+            System.out.println("Details generated for customer => " + firstName + " " + lastName);
+            System.out.println("Email: "+ email +"\nPhone: " + phoneNumber);
 
             PrintStatements.statementCall(PrintStatements.lastStatement);
 
@@ -98,6 +96,7 @@ public class AutomobilePriceAnalysis {
             while(true) {
                 if (userChoice == 0) {
                     isUserChoice = true;
+                    PrintStatements.statementCall(PrintStatements.farewellStatement);
                     break;
                 } else if (userChoice == 1) {
                     break;

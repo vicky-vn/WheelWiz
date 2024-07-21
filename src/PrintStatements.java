@@ -27,6 +27,8 @@ public class PrintStatements {
 
     static String invalidEntry = "Invalid Entry";
 
+    static String farewellStatement = "Thanks for using our application, Keep cruising for latest car details";
+
 
     //Method to print the default statements
     public static void statementCall(String statement) {
