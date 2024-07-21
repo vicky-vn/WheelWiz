@@ -5,8 +5,6 @@ public class PrintStatements {
 
     static String welcomeMsg2 = "\nPlease provide the following details to get started\n";
 
-    static String trendingCars = "Here are the trending terms available in our records!";
-
     static String firstNameRequest = "Please enter your first name";
 
     static String lastNameRequest = "Please enter your last name";

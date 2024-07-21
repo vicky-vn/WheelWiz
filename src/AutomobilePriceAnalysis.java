@@ -27,11 +27,12 @@ public class AutomobilePriceAnalysis {
 
             PrintStatements.statementCall(PrintStatements.welcomeMsg);
 
-            PrintStatements.statementCall(PrintStatements.trendingCars);
+            //PrintStatements.statementCall(PrintStatements.trendingCars);
+            System.out.print("Trending words : ");
+            FrequencyCount.getFrequencyCount();
+
 
             PrintStatements.statementCall(PrintStatements.welcomeMsg2);
-
-            //Frequency count function will be called your
 
             PrintStatements.statementCall(PrintStatements.firstNameRequest);
             // First Name validation
