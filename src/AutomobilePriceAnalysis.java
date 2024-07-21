@@ -4,19 +4,27 @@ public class AutomobilePriceAnalysis {
 
     public static void main(String[] args) {
 
+        String[] csvFilePaths = {
+                "scraped_chevrolet.csv",
+                "scraped_ford.csv",
+                "scraped_hyundai.csv",
+                "scraped_toyota.csv"
+        };
+        SpellCheck spellChecker = new SpellCheck(csvFilePaths);
+
         Scanner input = new Scanner(System.in);
 
         String firstName = "";
         String lastName = "";
-        String email="";
-        String phoneNumber="";
+        String email = "";
+        String phoneNumber = "";
         String contactDetails;
 
         boolean isUserChoice = false;
 
         int userChoice, maxBudget;
 
-        while(!isUserChoice) {
+        while (!isUserChoice) {
 
             boolean isFirstNameValid = false;
             boolean isLastNameValid = false;
@@ -85,30 +93,61 @@ public class AutomobilePriceAnalysis {
             // Word Completion here
 
             PrintStatements.statementCall(PrintStatements.carBrandRequest);
+
             // Spell check here
+            String brand = getBrandFromUser(input, spellChecker);
 
-            System.out.println("Details generated for customer => " + firstName + " " + lastName);
-            System.out.println("Email: "+ email +"\nPhone: " + phoneNumber);
+                System.out.println("Details generated for customer => " + firstName + " " + lastName);
+                System.out.println("Email: " + email + "\nPhone: " + phoneNumber);
 
-            PrintStatements.statementCall(PrintStatements.lastStatement);
+                PrintStatements.statementCall(PrintStatements.lastStatement);
 
-            userChoice = input.nextInt();
+                userChoice = input.nextInt();
 
-            while(true) {
-                if (userChoice == 0) {
-                    isUserChoice = true;
-                    PrintStatements.statementCall(PrintStatements.farewellStatement);
-                    break;
-                } else if (userChoice == 1) {
-                    break;
-                } else {
-                    PrintStatements.statementCall(PrintStatements.invalidEntry);
-                    PrintStatements.statementCall(PrintStatements.lastStatement);
-                    userChoice = input.nextInt();
-                    input.nextLine();
+                while (true) {
+                    if (userChoice == 0) {
+                        isUserChoice = true;
+                        PrintStatements.statementCall(PrintStatements.farewellStatement);
+                        break;
+                    } else if (userChoice == 1) {
+                        break;
+                    } else {
+                        PrintStatements.statementCall(PrintStatements.invalidEntry);
+                        PrintStatements.statementCall(PrintStatements.lastStatement);
+                        userChoice = input.nextInt();
+                        input.nextLine();
+                    }
                 }
             }
+            input.close();
         }
-        input.close();
+
+    private static String getBrandFromUser(Scanner input, SpellCheck spellChecker) {
+        while (true) {
+            String brand = input.nextLine();
+            String closestMatch = spellChecker.getClosestMatch(brand);
+
+            if (closestMatch == null) {
+                System.out.println("We don't have information for this particular model.");
+                System.out.println("Do you want to check another model? (Yes/No)");
+                String response = input.nextLine();
+                if (response.equalsIgnoreCase("No")) {
+                    return null;
+                } else {
+                    System.out.println("Please enter the brand name:");
+                    continue;
+                }
+            } else if (!brand.equalsIgnoreCase(closestMatch)) {
+                System.out.println("Did you mean: " + closestMatch + "? (Yes/No)");
+                String response = input.nextLine();
+                if (response.equalsIgnoreCase("Yes")) {
+                    return closestMatch;
+                } else {
+                    System.out.println("Please enter the correct brand name:");
+                }
+            } else {
+                return brand;
+            }
+        }
     }
 }
