@@ -4,13 +4,8 @@ public class AutomobilePriceAnalysis {
 
     public static void main(String[] args) {
 
-        String[] csvFilePaths = {
-                "scraped_chevrolet.csv",
-                "scraped_ford.csv",
-                "scraped_hyundai.csv",
-                "scraped_toyota.csv"
-        };
-        SpellCheck spellChecker = new SpellCheck(csvFilePaths);
+
+        SpellCheck spellChecker = new SpellCheck();
 
         Scanner input = new Scanner(System.in);
 
@@ -90,7 +85,7 @@ public class AutomobilePriceAnalysis {
             // Page ranking here
 
             PrintStatements.statementCall(PrintStatements.carCategoryRequest);
-            // Word Completion here
+            // Word Completion here and search frequency
 
             PrintStatements.statementCall(PrintStatements.carBrandRequest);
 
@@ -128,8 +123,8 @@ public class AutomobilePriceAnalysis {
             String closestMatch = spellChecker.getClosestMatch(brand);
 
             if (closestMatch == null) {
-                System.out.println("We don't have information for this particular model.");
-                System.out.println("Do you want to check another model? (Yes/No)");
+                System.out.println("We don't have information for this particular brand.");
+                System.out.println("Do you want to check another brand? (Yes/No)");
                 String response = input.nextLine();
                 if (response.equalsIgnoreCase("No")) {
                     return null;

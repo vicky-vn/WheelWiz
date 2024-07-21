@@ -1,6 +1,3 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,27 +5,13 @@ public class SpellCheck {
 
     private Set<String> vocabulary;
 
-    public SpellCheck(String[] csvFilePaths) {
+    public SpellCheck() {
         vocabulary = new HashSet<>();
-        for (String filePath : csvFilePaths) {
-            loadVocabulary(filePath);
-        }
-    }
-
-    private void loadVocabulary(String csvFilePath) {
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] values = line.split(",");
-                // Assuming the first column contains model names and the second column contains categories
-                vocabulary.add(values[0].trim().toLowerCase());
-                if (values.length > 1) {
-                    vocabulary.add(values[1].trim().toLowerCase());
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // Add the fixed list of car brands to the vocabulary
+        vocabulary.add("ford");
+        vocabulary.add("chevrolet");
+        vocabulary.add("hyundai");
+        vocabulary.add("toyota");
     }
 
     public String getClosestMatch(String input) {

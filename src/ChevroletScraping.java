@@ -10,11 +10,12 @@ import java.util.List;
 public class ChevroletScraping {
     public static void chevroletScraper(){
         // Set the path to the chromedriver executable
-        System.setProperty("webdriver.chrome.driver", "/Users/vigneshnatarajan/myData/ACC/chromedriver-mac-arm64/chromedriver");
+        //System.setProperty("webdriver.chrome.driver", "/Users/vigneshnatarajan/myData/ACC/chromedriver-mac-arm64/chromedriver");
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\madhu\\Downloads\\chromedriver-win64\\chromedriver-win64\\chromedriver.exe");
 
         // Set ChromeOptions to use Google Chrome for Testing
         ChromeOptions options = new ChromeOptions();
-        options.setBinary("/Applications/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing");
+        //options.setBinary("/Applications/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing");
 
         // Initialize the ChromeDriver with options
         WebDriver driver = new ChromeDriver(options);
