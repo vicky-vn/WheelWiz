@@ -4,10 +4,12 @@ import java.util.*;
 class TrieNodeKeer {
     Map<Character, TrieNodeKeer> chldrn;
     boolean isEndOfWordKeer;
+    String word; // Store the actual word at the end node
 
     TrieNodeKeer() {
         chldrn = new HashMap<>();
         isEndOfWordKeer = false;
+        word = null;
     }
 }
 
@@ -20,14 +22,17 @@ class TrieKeer {
 
     public void insert(String word) {
         TrieNodeKeer current = root;
-        for (char chKeer : word.toCharArray()) {
+        String lowerCaseWord = word.toLowerCase(); // Convert word to lowercase for the Trie structure
+        for (char chKeer : lowerCaseWord.toCharArray()) {
             current = current.chldrn.computeIfAbsent(chKeer, c -> new TrieNodeKeer());
         }
         current.isEndOfWordKeer = true;
+        current.word = word; // Store the original word at the end node
     }
 
     private TrieNodeKeer findNodeWithPrefix(String prfx) {
         TrieNodeKeer crrnt = root;
+        prfx = prfx.toLowerCase(); // Convert prefix to lowercase
         for (char chKeer : prfx.toCharArray()) {
             crrnt = crrnt.chldrn.get(chKeer);
             if (crrnt == null) {
@@ -37,22 +42,22 @@ class TrieKeer {
         return crrnt;
     }
 
-    private void collectWords(TrieNodeKeer node, String prfx, List<String> wordList) {
+    private void collectWords(TrieNodeKeer node, List<String> wordList) {
         if (node == null) {
             return;
         }
         if (node.isEndOfWordKeer) {
-            wordList.add(prfx);
+            wordList.add(node.word); // Add the original word
         }
         for (Map.Entry<Character, TrieNodeKeer> entry : node.chldrn.entrySet()) {
-            collectWords(entry.getValue(), prfx + entry.getKey(), wordList);
+            collectWords(entry.getValue(), wordList);
         }
     }
 
     public List<String> getWordsWithPrefix(String prefix) {
         TrieNodeKeer node = findNodeWithPrefix(prefix);
         List<String> wordList = new ArrayList<>();
-        collectWords(node, prefix, wordList);
+        collectWords(node, wordList);
         return wordList;
     }
 }
@@ -70,11 +75,11 @@ public class WordCompletion {
                     for (int i = 0; i < wordsKeer.length; i++) {
                         String word = wordsKeer[i].trim().replace("\"", "");
                         if (filePath.contains("scraped_chevrolet.csv")) {
-                            if (i % 3 == 2) {
+                            if (i % 3 == 2 && !word.equals("Category")) {
                                 trie.insert(word);
                             }
                         } else {
-                            if (i % 4 == 0) {
+                            if (i % 5 == 4 && word != "Category") {
                                 trie.insert(word);
                             }
                         }
