@@ -85,6 +85,8 @@ public class AutomobilePriceAnalysis {
             // Page ranking here
 
             PrintStatements.statementCall(PrintStatements.carCategoryRequest);
+            WordCompletion wc = new WordCompletion();
+            wc.wordCompletion();
             // Word Completion here and search frequency
 
             PrintStatements.statementCall(PrintStatements.carBrandRequest);
