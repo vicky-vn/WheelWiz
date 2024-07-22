@@ -125,6 +125,6 @@ public class WebCrawler {
 
     public static void main(String[] args) {
         WebCrawler crawler = new WebCrawler();
-        crawler.crawl("https://www.toyota.ca/", 30); // Example URL and max pages
+        crawler.crawl("https://www.toyota.ca/", 50); // Example URL and max pages
     }
 }
