@@ -6,6 +6,7 @@ public class AutomobilePriceAnalysis {
 
 
         SpellCheck spellChecker = new SpellCheck();
+        SearchFrequency.loadCsvData("sf_dataset.csv");
 
         Scanner input = new Scanner(System.in);
 
@@ -13,11 +14,11 @@ public class AutomobilePriceAnalysis {
         String lastName = "";
         String email = "";
         String phoneNumber = "";
-        String contactDetails;
+        String contactDetails, maxBudget;
 
         boolean isUserChoice = false;
 
-        int userChoice, maxBudget;
+        int userChoice;
 
         while (!isUserChoice) {
 
@@ -25,6 +26,7 @@ public class AutomobilePriceAnalysis {
             boolean isLastNameValid = false;
             boolean isEmailValid = false;
             boolean isPhoneNumberValid = false;
+            boolean isPriceValid = false;
 
             //FancyASCII.asciiPrint();
 
@@ -34,28 +36,32 @@ public class AutomobilePriceAnalysis {
             System.out.print("Trending words : ");
             FrequencyCount.getFrequencyCount();
 
+            System.out.println("Search Freq for Ref");
+            SearchFrequency.printTreeByFrequency();
+
+            //CarDetails.getDetails("Ford", "SUVs & Crossovers", 33344);
 
             PrintStatements.statementCall(PrintStatements.welcomeMsg2);
 
+            // Name logic messed up when pressed 1 at the end FIX IT!!!!!!
             PrintStatements.statementCall(PrintStatements.firstNameRequest);
-            // First Name validation
             while (!isFirstNameValid) {
                 firstName = input.nextLine().trim();
                 if (!firstName.isEmpty() && DataExtractionAndValidation.validateNames(firstName)) {
                     isFirstNameValid = true;
                 } else {
-                    PrintStatements.statementCall(PrintStatements.firstNameRequest);
+                    PrintStatements.statementCall(PrintStatements.invalidName);
                 }
             }
 
-            PrintStatements.statementCall(PrintStatements.lastNameRequest);
             // Last Name validation
+            PrintStatements.statementCall(PrintStatements.lastNameRequest);
             while (!isLastNameValid) {
                 lastName = input.nextLine().trim();
                 if (!lastName.isEmpty() && DataExtractionAndValidation.validateNames(lastName)) {
                     isLastNameValid = true;
                 } else {
-                    PrintStatements.statementCall(PrintStatements.lastNameRequest);
+                    PrintStatements.statementCall(PrintStatements.invalidName);
                 }
             }
 
@@ -93,10 +99,12 @@ public class AutomobilePriceAnalysis {
 
             // Spell check here
             String brand = getBrandFromUser(input, spellChecker);
+            SearchFrequency.addString(brand); // To increase the count
 
             System.out.println("Details generated for customer => " + firstName + " " + lastName);
             System.out.println("Email: " + email + "\nPhone: " + phoneNumber);
 
+            SearchFrequency.printTreeByFrequency();
             PrintStatements.statementCall(PrintStatements.lastStatement);
 
             userChoice = input.nextInt();
@@ -116,7 +124,7 @@ public class AutomobilePriceAnalysis {
                 }
             }
         }
-        input.close();
+            input.close();
     }
 
     private static String getBrandFromUser(Scanner input, SpellCheck spellChecker) {
