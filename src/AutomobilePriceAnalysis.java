@@ -7,6 +7,7 @@ public class AutomobilePriceAnalysis {
 
         SpellCheck spellChecker = new SpellCheck();
         SearchFrequency.loadCsvData("sf_dataset.csv");
+        CarDetails.readCSVToMap("scraped_ford.csv");
 
         Scanner input = new Scanner(System.in);
 
@@ -14,11 +15,11 @@ public class AutomobilePriceAnalysis {
         String lastName = "";
         String email = "";
         String phoneNumber = "";
-        String contactDetails, maxBudget;
+        String contactDetails;
 
         boolean isUserChoice = false;
 
-        int userChoice;
+        int userChoice,maxBudget;
 
         while (!isUserChoice) {
 
@@ -50,7 +51,7 @@ public class AutomobilePriceAnalysis {
                 if (!firstName.isEmpty() && DataExtractionAndValidation.validateNames(firstName)) {
                     isFirstNameValid = true;
                 } else {
-                    PrintStatements.statementCall(PrintStatements.invalidName);
+
                 }
             }
 
@@ -61,7 +62,7 @@ public class AutomobilePriceAnalysis {
                 if (!lastName.isEmpty() && DataExtractionAndValidation.validateNames(lastName)) {
                     isLastNameValid = true;
                 } else {
-                    PrintStatements.statementCall(PrintStatements.invalidName);
+
                 }
             }
 
@@ -88,6 +89,8 @@ public class AutomobilePriceAnalysis {
             }
 
             PrintStatements.statementCall(PrintStatements.maxBudgetRequest);
+            maxBudget = input.nextInt();
+            input.nextLine();
             // Page ranking here
 
             PrintStatements.statementCall(PrintStatements.carCategoryRequest);
@@ -103,6 +106,8 @@ public class AutomobilePriceAnalysis {
 
             System.out.println("Details generated for customer => " + firstName + " " + lastName);
             System.out.println("Email: " + email + "\nPhone: " + phoneNumber);
+
+            CarDetails.getDetails(brand, "SUVs & Crossovers", maxBudget);// Output
 
             SearchFrequency.printTreeByFrequency();
             PrintStatements.statementCall(PrintStatements.lastStatement);
