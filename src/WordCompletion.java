@@ -95,42 +95,42 @@ public class WordCompletion {
 
     public void wordCompletion(Scanner scnnrKeer) {
         String[] filPaths = {
-            "../scraped_chevrolet.csv",
-            "../scraped_ford.csv",
-            "../scraped_hyundai.csv",
-            "../scraped_toyota.csv"
+                "scraped_chevrolet.csv",
+                "scraped_ford.csv",
+                "scraped_hyundai.csv",
+                "scraped_toyota.csv"
         };
 
         try {
-            loadVocabulary(filPaths); 
+            loadVocabulary(filPaths);
 
-        boolean running = true;
-        while (running) {
-            System.out.print("Enter the prefix of the Category for autocomplete or Press 'Enter' if not sure: ");
-            String prfx = scnnrKeer.nextLine();
-            List<String> sggstns = getAutocompleteSuggestions(prfx);
+            boolean running = true;
+            while (running) {
+                System.out.print("Enter the prefix of the Category for autocomplete or Press 'Enter' if not sure: ");
+                String prfx = scnnrKeer.nextLine();
+                List<String> sggstns = getAutocompleteSuggestions(prfx);
 
-            if (sggstns.isEmpty()) {
-                System.out.println("No suggestions found. Please try a different prefix.");
-            } else {
-                System.out.println("Autocomplete Suggestions:");
-                for (int i = 0; i < sggstns.size(); i++) {
-                    System.out.println((i + 1) + ". " + sggstns.get(i));
-                }
-                System.out.print("Select a suggestion by entering the number: ");
-                int selection = scnnrKeer.nextInt();
-                scnnrKeer.nextLine(); // Consume the newline character
-
-                if (selection >= 1 && selection <= sggstns.size()) {
-                    System.out.println("You selected: " + sggstns.get(selection - 1));
-                    running = false; // Exit the loop if a valid selection is made
+                if (sggstns.isEmpty()) {
+                    System.out.println("No suggestions found. Please try a different prefix.");
                 } else {
-                    System.out.println("Invalid selection. Please try again.");
+                    System.out.println("Autocomplete Suggestions:");
+                    for (int i = 0; i < sggstns.size(); i++) {
+                        System.out.println((i + 1) + ". " + sggstns.get(i));
+                    }
+                    System.out.print("Select a suggestion by entering the number: ");
+                    int selection = scnnrKeer.nextInt();
+                    scnnrKeer.nextLine(); // Consume the newline character
+
+                    if (selection >= 1 && selection <= sggstns.size()) {
+                        System.out.println("You selected: " + sggstns.get(selection - 1));
+                        running = false; // Exit the loop if a valid selection is made
+                    } else {
+                        System.out.println("Invalid selection. Please try again.");
+                    }
                 }
             }
         }
-    }
-    catch (IOException e) {
+        catch (IOException e) {
             e.printStackTrace();
             return; // Exit if there is an error loading the vocabulary
         }
