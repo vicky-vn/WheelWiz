@@ -12,7 +12,7 @@ public class AutomobilePriceAnalysis {
         SearchFrequency.loadCsvData("sf_dataset.csv");
 
         //List<String> filePaths = Arrays.asList("scraped_ford.csv","scraped_hyundai.csv","scraped_toyota.csv","scraped_chevrolet.csv");
-        List<String> filePaths = Arrays.asList("scraped_ford.csv");
+        List<String> filePaths = Arrays.asList("scraped_mitsubishi.csv");
         CarDetails.readCSVsToMap(filePaths);
 
         // Load the inverted index if it exists, otherwise build it
@@ -34,6 +34,8 @@ public class AutomobilePriceAnalysis {
         String email = "";
         String phoneNumber = "";
         String contactDetails;
+        String keyword = "mirage";
+
 
         boolean isUserChoice = false;
 
@@ -57,6 +59,9 @@ public class AutomobilePriceAnalysis {
 
             System.out.println("Search Freq for Ref");
             SearchFrequency.printTreeByFrequency();
+
+            InvertedIndexing.printRelevantUrls(keyword, invertedIndex);
+
 
             PrintStatements.statementCall(PrintStatements.welcomeMsg2);
 
@@ -131,8 +136,7 @@ public class AutomobilePriceAnalysis {
             SearchFrequency.printTreeByFrequency();
 
             //Partial Inverted Indexing
-            String keyword = "corolla";
-            InvertedIndexing.printRelevantUrls(keyword, invertedIndex);
+//            InvertedIndexing.printRelevantUrls(keyword, invertedIndex);
 
             PrintStatements.statementCall(PrintStatements.lastStatement);
 

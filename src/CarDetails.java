@@ -33,6 +33,8 @@ public class CarDetails {
 
     // Method to get car details based on brand, category, and price
     public static void getDetails(String brand, String category, int price) {
+        boolean found = false;
+
         for (Map<String, Object> carData : carDataList) {
             String carBrand = (String) carData.get("Brand");
             String carCategory = (String) carData.get("Category");
@@ -45,17 +47,21 @@ public class CarDetails {
                 System.out.println("Price: $" + carPrice);
                 System.out.println("Category: " + carCategory);
                 System.out.println("------------------------------------");
+                found = true;
             }
+        }
+
+        if (!found) {
+            System.out.println("No data found");
         }
     }
 
     public static void main(String[] args) {
         // List of CSV file paths
-        List<String> filePaths = Arrays.asList("scraped_ford1.csv", "scraped_ford2.csv");
-
+        List<String> filePaths = Arrays.asList("scraped_mitsubishi.csv");
         readCSVsToMap(filePaths);
 
         // Example usage of getDetails method
-        getDetails("ford", "Sedan", 60000);
+        getDetails("Mitsubishi", "SUV", 85000);
     }
 }

@@ -20,7 +20,7 @@ public class WebCrawler {
                 "https://toyota.ca",
                 "https://hyundaicanada.com",
                 "https://chevrolet.ca",
-                "https://ford.ca"
+                "https://mitsubishi-motors.ca"
         };
 
         WebCrawler crawler = new WebCrawler();
