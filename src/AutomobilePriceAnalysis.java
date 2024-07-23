@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class AutomobilePriceAnalysis {
@@ -6,6 +9,23 @@ public class AutomobilePriceAnalysis {
 
 
         SpellCheck spellChecker = new SpellCheck();
+        SearchFrequency.loadCsvData("sf_dataset.csv");
+
+        //List<String> filePaths = Arrays.asList("scraped_ford.csv","scraped_hyundai.csv","scraped_toyota.csv","scraped_chevrolet.csv");
+        List<String> filePaths = Arrays.asList("scraped_ford.csv");
+        CarDetails.readCSVsToMap(filePaths);
+
+        // Load the inverted index if it exists, otherwise build it
+        Map<String, Map<String, Integer>> invertedIndex;
+        if (new java.io.File(InvertedIndexing.INDEX_FILE).exists()) {
+            //System.out.println("Loading the inverted index from file...");
+            invertedIndex = InvertedIndexing.loadInvertedIndex();
+        } else {
+            //System.out.println("Building the inverted index...");
+            invertedIndex = InvertedIndexing.buildInvertedIndex();
+            //System.out.println("Inverted index built successfully.");
+            InvertedIndexing.saveInvertedIndex(invertedIndex);
+        }
 
         Scanner input = new Scanner(System.in);
 
@@ -17,7 +37,7 @@ public class AutomobilePriceAnalysis {
 
         boolean isUserChoice = false;
 
-        int userChoice, maxBudget;
+        int userChoice,maxBudget;
 
         while (!isUserChoice) {
 
@@ -25,6 +45,7 @@ public class AutomobilePriceAnalysis {
             boolean isLastNameValid = false;
             boolean isEmailValid = false;
             boolean isPhoneNumberValid = false;
+            boolean isPriceValid = false;
 
             //FancyASCII.asciiPrint();
 
@@ -34,28 +55,30 @@ public class AutomobilePriceAnalysis {
             System.out.print("Trending words : ");
             FrequencyCount.getFrequencyCount();
 
+            System.out.println("Search Freq for Ref");
+            SearchFrequency.printTreeByFrequency();
 
             PrintStatements.statementCall(PrintStatements.welcomeMsg2);
 
+            // First Name Validation
             PrintStatements.statementCall(PrintStatements.firstNameRequest);
-            // First Name validation
             while (!isFirstNameValid) {
                 firstName = input.nextLine().trim();
                 if (!firstName.isEmpty() && DataExtractionAndValidation.validateNames(firstName)) {
                     isFirstNameValid = true;
                 } else {
-                    PrintStatements.statementCall(PrintStatements.firstNameRequest);
+
                 }
             }
 
-            PrintStatements.statementCall(PrintStatements.lastNameRequest);
             // Last Name validation
+            PrintStatements.statementCall(PrintStatements.lastNameRequest);
             while (!isLastNameValid) {
                 lastName = input.nextLine().trim();
                 if (!lastName.isEmpty() && DataExtractionAndValidation.validateNames(lastName)) {
                     isLastNameValid = true;
                 } else {
-                    PrintStatements.statementCall(PrintStatements.lastNameRequest);
+
                 }
             }
 
@@ -82,6 +105,8 @@ public class AutomobilePriceAnalysis {
             }
 
             PrintStatements.statementCall(PrintStatements.maxBudgetRequest);
+            maxBudget = input.nextInt();
+            input.nextLine();
             // Page ranking here
 
             PrintStatements.statementCall(PrintStatements.carCategoryRequest);
@@ -93,9 +118,21 @@ public class AutomobilePriceAnalysis {
 
             // Spell check here
             String brand = getBrandFromUser(input, spellChecker);
+            SearchFrequency.addString(brand); // To increase the count
 
             System.out.println("Details generated for customer => " + firstName + " " + lastName);
             System.out.println("Email: " + email + "\nPhone: " + phoneNumber);
+            System.out.println("\n********************************");
+            System.out.println("********************************");
+
+
+            CarDetails.getDetails("Ford", "SUVs & Crossovers", maxBudget);// Output
+
+            SearchFrequency.printTreeByFrequency();
+
+            //Partial Inverted Indexing
+            String keyword = "corolla";
+            InvertedIndexing.printRelevantUrls(keyword, invertedIndex);
 
             PrintStatements.statementCall(PrintStatements.lastStatement);
 
