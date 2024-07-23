@@ -86,7 +86,7 @@ public class AutomobilePriceAnalysis {
 
             PrintStatements.statementCall(PrintStatements.carCategoryRequest);
             WordCompletion wc = new WordCompletion();
-            wc.wordCompletion();
+            wc.wordCompletion(input);
             // Word Completion here and search frequency
 
             PrintStatements.statementCall(PrintStatements.carBrandRequest);
@@ -94,30 +94,30 @@ public class AutomobilePriceAnalysis {
             // Spell check here
             String brand = getBrandFromUser(input, spellChecker);
 
-                System.out.println("Details generated for customer => " + firstName + " " + lastName);
-                System.out.println("Email: " + email + "\nPhone: " + phoneNumber);
+            System.out.println("Details generated for customer => " + firstName + " " + lastName);
+            System.out.println("Email: " + email + "\nPhone: " + phoneNumber);
 
-                PrintStatements.statementCall(PrintStatements.lastStatement);
+            PrintStatements.statementCall(PrintStatements.lastStatement);
 
-                userChoice = input.nextInt();
+            userChoice = input.nextInt();
 
-                while (true) {
-                    if (userChoice == 0) {
-                        isUserChoice = true;
-                        PrintStatements.statementCall(PrintStatements.farewellStatement);
-                        break;
-                    } else if (userChoice == 1) {
-                        break;
-                    } else {
-                        PrintStatements.statementCall(PrintStatements.invalidEntry);
-                        PrintStatements.statementCall(PrintStatements.lastStatement);
-                        userChoice = input.nextInt();
-                        input.nextLine();
-                    }
+            while (true) {
+                if (userChoice == 0) {
+                    isUserChoice = true;
+                    PrintStatements.statementCall(PrintStatements.farewellStatement);
+                    break;
+                } else if (userChoice == 1) {
+                    break;
+                } else {
+                    PrintStatements.statementCall(PrintStatements.invalidEntry);
+                    PrintStatements.statementCall(PrintStatements.lastStatement);
+                    userChoice = input.nextInt();
+                    input.nextLine();
                 }
             }
-            input.close();
         }
+        input.close();
+    }
 
     private static String getBrandFromUser(Scanner input, SpellCheck spellChecker) {
         while (true) {
