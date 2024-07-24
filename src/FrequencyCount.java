@@ -8,7 +8,7 @@ public class FrequencyCount {
     public static void getFrequencyCount() {  // Initializing a list with dataset file names
         List<String> sourceFiles = Arrays.asList(
                 "scraped_toyota.csv",
-                "scraped_ford.csv",
+                "scraped_mitsubishi.csv",
                 "scraped_chevrolet.csv",
                 "scraped_hyundai.csv");
 
