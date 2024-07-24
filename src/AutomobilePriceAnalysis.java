@@ -115,7 +115,7 @@ public class AutomobilePriceAnalysis {
             PrintStatements.statementCall(PrintStatements.carBrandRequest);
 
             // Spell check here
-            String brand = getBrandFromUser(input, spellChecker);
+            String brand = SpellCheck.getBrandFromUser(input, spellChecker);
             SearchFrequency.addString(brand); // To increase the count
 
             System.out.println("Details generated for customer => " + firstName + " " + lastName);
@@ -154,33 +154,5 @@ public class AutomobilePriceAnalysis {
             }
         }
         input.close();
-    }
-
-    private static String getBrandFromUser(Scanner input, SpellCheck spellChecker) {
-        while (true) {
-            String brand = input.nextLine();
-            String closestMatch = spellChecker.getClosestMatch(brand);
-
-            if (closestMatch == null) {
-                System.out.println("We don't have information for this particular brand.");
-                System.out.println("Do you want to check another brand? (Yes/No)");
-                String response = input.nextLine();
-                if (response.equalsIgnoreCase("No")) {
-                    return null;
-                } else {
-                    System.out.println("Please enter the brand name:");
-                }
-            } else if (!brand.equalsIgnoreCase(closestMatch)) {
-                System.out.println("Did you mean: " + closestMatch + "? (Yes/No)");
-                String response = input.nextLine();
-                if (response.equalsIgnoreCase("Yes")) {
-                    return closestMatch;
-                } else {
-                    System.out.println("Please enter the correct brand name:");
-                }
-            } else {
-                return brand;
-            }
-        }
     }
 }

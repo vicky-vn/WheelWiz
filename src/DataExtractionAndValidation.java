@@ -41,7 +41,6 @@ public class DataExtractionAndValidation {
         return null;
     }
 
-
     // Method to validate email
     public static boolean validateEmail(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
