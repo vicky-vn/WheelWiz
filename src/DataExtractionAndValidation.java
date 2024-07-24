@@ -27,6 +27,20 @@ public class DataExtractionAndValidation {
         return null;
     }
 
+    // Method to extract price from text
+    public static String extractPrice(String text) {
+        // Regular expression to match prices in USD or CAD format (case insensitive for CAD)
+        String priceRegex = "\\b(\\$\\s?\\d{1,3}(?:,\\d{3})*(?:\\.\\d{2})?|\\d{1,3}(?:,\\d{3})*(?:\\.\\d{2})?\\s?(CAD|cad))\\b";
+        Pattern pattern = Pattern.compile(priceRegex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            // Extract the numeric part from the matched group
+            String numericPrice = matcher.group().replaceAll("[^\\d.]", "");
+            return numericPrice;
+        }
+        return null;
+    }
+
     // Method to validate email
     public static boolean validateEmail(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
@@ -49,6 +63,24 @@ public class DataExtractionAndValidation {
         Pattern pattern = Pattern.compile(nameRegex);
         Matcher matcher = pattern.matcher(name);
         return matcher.matches();
+    }
+
+    // Method to validate prices containing only digits and optional currency symbols
+    public static boolean validatePrice(String price) {
+        // Regular expression to match prices with only digits and optional USD or CAD format
+        String priceRegex = "^\\$?\\s?\\d+(?:,\\d{3})*(?:\\.\\d{2})?\\s?(CAD|cad)?$";
+        Pattern pattern = Pattern.compile(priceRegex);
+        Matcher matcher = pattern.matcher(price);
+        return matcher.matches();
+    }
+
+    // Method to parse the price string to an integer
+    public static int parsePrice(String price) {
+        // Remove non-numeric characters except for decimal point
+        String numericPrice = price.replaceAll("[^\\d.]", "");
+        // Convert to integer
+        double priceDouble = Double.parseDouble(numericPrice);
+        return (int) priceDouble;
     }
 
     public static void main(String[] args) {

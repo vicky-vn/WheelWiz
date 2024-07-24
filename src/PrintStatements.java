@@ -1,6 +1,5 @@
 public class PrintStatements {
 
-
     static String welcomeMsg = "Welcome to our application! We will help you find the right wheels\n";
 
     static String welcomeMsg2 = "\nPlease provide the following details to get started\n";
@@ -9,6 +8,8 @@ public class PrintStatements {
 
     static String lastNameRequest = "Please enter your last name";
 
+    static String validNameRequest = "Please enter a valid name";
+
     static String contactDetailsRequest = "Please enter your E-mail ID & Mobile Number";
 
     static String invalidEmail = "No valid email found in the input";
@@ -16,6 +17,8 @@ public class PrintStatements {
     static String invalidPhone = "No valid phone number found in the input";
 
     static String maxBudgetRequest = "\nPlease enter your maximum budget";
+
+    static String validBudgetRequest = "Please enter a valid price containing only digits in USD (e.g., $123.45) or CAD (e.g., 123.45 CAD).";
 
     static String carCategoryRequest ="Please enter the category you're interested in";
 
