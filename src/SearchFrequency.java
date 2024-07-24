@@ -118,7 +118,7 @@ public class SearchFrequency {
 
     public static void main(String[] args) {
         // Load the existing CSV data into the AVL tree
-        loadCsvData(CSV_FILE_PATH);
+        loadCsvData();
 
         // Example usage
         addString("example");
@@ -134,17 +134,17 @@ public class SearchFrequency {
         printTreeByFrequency();
 
         // Write updated data back to CSV
-        writeCsvData(CSV_FILE_PATH);
+        writeCsvData();
     }
 
     public static void addString(String input) {
         avlTree.insert(input);
         frequencyMap.put(input, frequencyMap.getOrDefault(input, 0) + 1);
-        writeCsvData(CSV_FILE_PATH);
+        writeCsvData();
     }
 
-    public static void loadCsvData(String filePath) {
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+    public static void loadCsvData() {
+        try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
@@ -160,8 +160,8 @@ public class SearchFrequency {
         }
     }
 
-    public static void writeCsvData(String filePath) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+    public static void writeCsvData() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CSV_FILE_PATH))) {
             for (Map.Entry<String, Integer> entry : frequencyMap.entrySet()) {
                 bw.write(entry.getKey() + "," + entry.getValue());
                 bw.newLine();

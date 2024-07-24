@@ -17,8 +17,6 @@ public class InvertedIndexing {
         int processedCount = 0;
         int totalUrls = urls.size();
 
-        System.out.println("Total URLs to process: " + totalUrls);
-
         for (String url : urls) {
             try {
                 String[] keywords = extractKeywordsFromUrl(url);
@@ -39,7 +37,6 @@ public class InvertedIndexing {
     }
 
     public static String[] extractKeywordsFromUrl(String varForUrl) throws IOException {
-        System.out.println("Fetching content from URL: " + varForUrl);
         Document varForDoc = Jsoup.connect(varForUrl).timeout(10 * 1000).get();
         String text = varForDoc.body().text();
         return extractKeywordsFromText(text);
@@ -61,20 +58,27 @@ public class InvertedIndexing {
         return keywords.toArray(new String[0]);
     }
 
-    public static void printRelevantUrls(String keyword, Map<String, Map<String, Integer>> invertedIndex) {
+    public static String pageRanker(String keyword, Map<String, Map<String, Integer>> invertedIndex) {
         // Normalize the keyword to handle spaces or hyphens
         String normalizedKeyword = keyword.split("[\\s-]")[0].toLowerCase();
         Map<String, Integer> urlCounts = invertedIndex.get(normalizedKeyword);
 
         if (urlCounts == null || urlCounts.isEmpty()) {
-            System.out.println("No URLs found for keyword \"" + normalizedKeyword + "\".");
-            return;
+            return "No URLs found for keyword \"" + normalizedKeyword + "\".";
         }
 
-        //System.out.println("URLs containing the keyword \"" + normalizedKeyword + "\":");
+        // Find the URL with the highest occurrence
+        String topUrl = null;
+        int maxOccurrences = 0;
+
         for (Map.Entry<String, Integer> entry : urlCounts.entrySet()) {
-            System.out.println("{ URL : " + entry.getKey() + ", Occurrences :" + entry.getValue() + "}");
+            if (entry.getValue() > maxOccurrences) {
+                topUrl = entry.getKey();
+                maxOccurrences = entry.getValue();
+            }
         }
+
+        return topUrl != null ? topUrl : "No top URL found for keyword \"" + normalizedKeyword + "\".";
     }
 
     private static List<String> readUrls() {
@@ -93,7 +97,6 @@ public class InvertedIndexing {
     public static void saveInvertedIndex(Map<String, Map<String, Integer>> index) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(varForIndexFile))) {
             oos.writeObject(index);
-            System.out.println("Inverted index saved to file.");
         } catch (IOException exc) {
             System.err.println("Error occurred in saving inverted index: " + exc.getMessage());
         }
@@ -103,39 +106,10 @@ public class InvertedIndexing {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(varForIndexFile))) {
             @SuppressWarnings("unchecked")
             Map<String, Map<String, Integer>> index = (Map<String, Map<String, Integer>>) ois.readObject();
-            //System.out.println("Inverted index loaded from file.");
             return index;
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Error occurred in loading inverted index: " + e.getMessage());
             return new HashMap<>();
         }
-    }
-
-    public static void printTopWordFrequencies(String url, int topN) {
-        try {
-            Document document = Jsoup.connect(url).timeout(10 * 1000).get();
-            String text = document.body().text();
-            Map<String, Integer> wordFrequencies = getWordFrequencies(text);
-            System.out.println("Top " + topN + " word frequencies for URL: " + url);
-            wordFrequencies.entrySet().stream()
-                    .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                    .limit(topN)
-                    .forEach(entry -> System.out.print("| " + entry.getKey() + " "+ entry.getValue() + " | "));
-            System.out.println();
-        } catch (IOException exc) {
-            System.err.println("Error occurred in fetching content from URL: " + url + " - " + exc.getMessage());
-        }
-    }
-
-    public static Map<String, Integer> getWordFrequencies(String text) {
-        String[] words = text.split("\\W+");
-        Map<String, Integer> wordFrequencies = new HashMap<>();
-        for (String word : words) {
-            String lowerCaseWord = word.toLowerCase().split("[\\s-]")[0].replaceAll("[^\\w]", "");
-            if (!varForStoppers.contains(lowerCaseWord) && lowerCaseWord.length() > 1) {
-                wordFrequencies.put(lowerCaseWord, wordFrequencies.getOrDefault(lowerCaseWord, 0) + 1);
-            }
-        }
-        return wordFrequencies;
     }
 }

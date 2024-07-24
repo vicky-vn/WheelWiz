@@ -1,16 +1,13 @@
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class AutomobilePriceAnalysis {
 
     public static void main(String[] args) {
-        SpellCheck spellChecker = new SpellCheck();
-        SearchFrequency.loadCsvData("sf_dataset.csv");
 
-        List<String> filePaths = Arrays.asList("scraped_mitsubishi.csv");
-        CarDetails.readCSVsToMap(filePaths);
+        SpellCheck spellChecker = new SpellCheck();
+        SearchFrequency.loadCsvData();
+        CarDetails.readCSVsToMap();
 
         // Load the inverted index if it exists, otherwise build it
         Map<String, Map<String, Integer>> invertedIndex;
@@ -21,16 +18,19 @@ public class AutomobilePriceAnalysis {
             InvertedIndexing.saveInvertedIndex(invertedIndex);
         }
 
+        // Set the inverted index in CarDetails
+        CarDetails.setInvertedIndex(invertedIndex);
+
         Scanner input = new Scanner(System.in);
 
         String firstName = "";
         String lastName = "";
         String email = "";
         String phoneNumber = "";
-        String contactDetails,maxBudgetString;
+        String contactDetails, maxBudgetString;
 
         boolean isUserChoice = false;
-        int userChoice,price=0;
+        int userChoice, price = 0;
 
         while (!isUserChoice) {
             boolean isFirstNameValid = false;
@@ -44,10 +44,10 @@ public class AutomobilePriceAnalysis {
             System.out.print("Trending words : ");
             FrequencyCount.getFrequencyCount();
 
-            System.out.println("Search Freq for Ref");
+            System.out.print("Most Searched : ");
             SearchFrequency.printTreeByFrequency();
 
-            InvertedIndexing.printRelevantUrls("eclipse-cross", invertedIndex); // It's the model
+            CarDetails.getDetails("Mitsubishi", "SUV & Crossover", 35000);
 
             PrintStatements.statementCall(PrintStatements.welcomeMsg2);
 
@@ -122,8 +122,6 @@ public class AutomobilePriceAnalysis {
             System.out.println("Email: " + email + "\nPhone: " + phoneNumber);
             System.out.println("\n********************************");
             System.out.println("********************************");
-
-            CarDetails.getDetails("Mitsubishi", "SUV & Crossover", price); // Output
 
             SearchFrequency.printTreeByFrequency();
 

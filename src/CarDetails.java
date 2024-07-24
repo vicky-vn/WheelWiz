@@ -5,10 +5,18 @@ import java.util.*;
 
 public class CarDetails {
     private static List<Map<String, Object>> carDataList = new ArrayList<>();
+    private static Map<String, Map<String, Integer>> invertedIndex = new HashMap<>();
 
     // Method to read multiple CSV files and merge their data into carDataList
-    public static void readCSVsToMap(List<String> filePaths) {
+    public static void readCSVsToMap() {
         carDataList.clear(); // Clear the list before reading new data
+
+        // List of file paths to read
+        List<String> filePaths = Arrays.asList(
+                "scraped_mitsubishi.csv",
+                "scraped_hyundai.csv",
+                "scraped_toyota.csv",
+                "scraped_chevrolet.csv");
 
         for (String filePath : filePaths) {
             try (CSVReader csvReader = new CSVReader(new FileReader(filePath))) {
@@ -31,6 +39,11 @@ public class CarDetails {
         }
     }
 
+    // Method to set the inverted index
+    public static void setInvertedIndex(Map<String, Map<String, Integer>> index) {
+        invertedIndex = index;
+    }
+
     // Method to get car details based on brand, category, and price
     public static void getDetails(String brand, String category, int price) {
         boolean found = false;
@@ -38,15 +51,26 @@ public class CarDetails {
         for (Map<String, Object> carData : carDataList) {
             String carBrand = (String) carData.get("Brand");
             String carCategory = (String) carData.get("Category");
-            int carPrice = (int) carData.get("Price");
+            Integer carPrice = (Integer) carData.get("Price"); // Use Integer instead of int
 
-            if (carBrand.equalsIgnoreCase(brand) && carCategory.equalsIgnoreCase(category) && carPrice < price) {
+            if (carBrand != null && carBrand.equalsIgnoreCase(brand) &&
+                    carCategory != null && carCategory.equalsIgnoreCase(category) &&
+                    carPrice != null && carPrice < price) {
+
+                String model = (String) carData.get("Model");
+                // Normalize the model to handle spaces, hyphens, and case insensitivity
+                String normalizedModel = model.split("[\\s-]")[0].toLowerCase();
+                // Use the normalized model as the keyword for pageRanker
+                String topUrl = InvertedIndexing.pageRanker(normalizedModel, invertedIndex);
+
+                System.out.println("----------------------------------------------");
                 System.out.println("Brand: " + carBrand);
-                System.out.println("Model: " + carData.get("Model"));
+                System.out.println("Model: " + model);
                 System.out.println("Year: " + carData.get("Year"));
                 System.out.println("Price: $" + carPrice);
                 System.out.println("Category: " + carCategory);
-                System.out.println("------------------------------------");
+                System.out.println("Top URL: " + topUrl);
+                System.out.println("---------------------------------------------");
                 found = true;
             }
         }
@@ -54,14 +78,5 @@ public class CarDetails {
         if (!found) {
             System.out.println("No data found");
         }
-    }
-
-    public static void main(String[] args) {
-        // List of CSV file paths
-        List<String> filePaths = Arrays.asList("scraped_mitsubishi.csv");
-        readCSVsToMap(filePaths);
-
-        // Example usage of getDetails method
-        getDetails("Mitsubishi", "SUV", 85000);
     }
 }
