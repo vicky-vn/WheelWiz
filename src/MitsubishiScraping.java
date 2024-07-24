@@ -18,6 +18,7 @@ public class MitsubishiScraping {
         try {
             // Set the path to the WebDriver executable
             String vicky = "/Users/vigneshnatarajan/myData/ACC/chromedriver-mac-arm64/chromedriver";
+            String madhu = "";
             System.setProperty("webdriver.chrome.driver", vicky);
 
             // Initialize WebDriver
