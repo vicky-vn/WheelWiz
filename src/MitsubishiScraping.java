@@ -17,7 +17,8 @@ public class MitsubishiScraping {
 
         try {
             // Set the path to the WebDriver executable
-            System.setProperty("webdriver.chrome.driver", "/Users/vigneshnatarajan/myData/ACC/chromedriver-mac-arm64/chromedriver");
+            String vicky = "/Users/vigneshnatarajan/myData/ACC/chromedriver-mac-arm64/chromedriver";
+            System.setProperty("webdriver.chrome.driver", vicky);
 
             // Initialize WebDriver
             ChromeOptions options = new ChromeOptions();
@@ -62,7 +63,7 @@ public class MitsubishiScraping {
                     int price = Integer.parseInt(priceWithoutSymbols);
 
                     // Determine category
-                    String category = name.equalsIgnoreCase("Mirage") ? "Hatchback" : "SUV";
+                    String category = name.equalsIgnoreCase("Mirage") ? "Hatchback" : "SUV & Crossover";
 
                     // Add data to the list in the required order
                     carData.add(new String[]{brand, name, year, Integer.toString(price), category});
@@ -75,13 +76,13 @@ public class MitsubishiScraping {
             try (FileWriter fileWriter = new FileWriter("scraped_mitsubishi.csv")) {
                 writer = new CSVWriter(fileWriter);
                 writer.writeAll(carData);
+                System.out.println("Scraped mitsubishi details successfully");
             } catch (IOException e) {
                 System.err.println("Failed to write CSV file: " + e.getMessage());
             }
 
         } catch (Exception exc) {
             System.err.println("An error occurred: " + exc.getMessage());
-            exc.printStackTrace();
         } finally {
             if (driver != null) {
                 // Close the browser
