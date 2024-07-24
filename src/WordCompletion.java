@@ -96,7 +96,7 @@ public class WordCompletion {
     public void wordCompletion(Scanner scnnrKeer) {
         String[] filPaths = {
                 "scraped_chevrolet.csv",
-                "scraped_ford.csv",
+                "scraped_mitsubishi.csv",
                 "scraped_hyundai.csv",
                 "scraped_toyota.csv"
         };

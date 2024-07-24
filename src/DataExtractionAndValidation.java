@@ -29,17 +29,18 @@ public class DataExtractionAndValidation {
 
     // Method to extract price from text
     public static String extractPrice(String text) {
-        // Regular expression to match prices in USD or CAD format (case insensitive for CAD)
-        String priceRegex = "\\b(\\$\\s?\\d{1,3}(?:,\\d{3})*(?:\\.\\d{2})?|\\d{1,3}(?:,\\d{3})*(?:\\.\\d{2})?\\s?(CAD|cad))\\b";
+        // Regular expression to match prices in various formats
+        String priceRegex = "\\b\\$?\\s?(\\d{1,3}(?:,\\d{3})*|\\d+)(?:\\.\\d{2})?\\s?(CAD|cad)?\\b";
         Pattern pattern = Pattern.compile(priceRegex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(text);
         if (matcher.find()) {
             // Extract the numeric part from the matched group
-            String numericPrice = matcher.group().replaceAll("[^\\d.]", "");
+            String numericPrice = matcher.group(1).replaceAll(",", "");
             return numericPrice;
         }
         return null;
     }
+
 
     // Method to validate email
     public static boolean validateEmail(String email) {
