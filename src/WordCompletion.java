@@ -93,7 +93,7 @@ public class WordCompletion {
         return trie.getWordsWithPrefix(prfx);
     }
 
-    public void wordCompletion(Scanner scnnrKeer) {
+    public String wordCompletion(Scanner scnnrKeer) {
         String[] filPaths = {
                 "scraped_chevrolet.csv",
                 "scraped_mitsubishi.csv",
@@ -105,11 +105,11 @@ public class WordCompletion {
             loadVocabulary(filPaths);
 
             boolean running = true;
+            String category = "";
+            System.out.print("Enter the prefix of the Category for autocomplete or Press 'Enter' if not sure: ");
+            String prfx = scnnrKeer.nextLine();
+            List<String> sggstns = getAutocompleteSuggestions(prfx);
             while (running) {
-                System.out.print("Enter the prefix of the Category for autocomplete or Press 'Enter' if not sure: ");
-                String prfx = scnnrKeer.nextLine();
-                List<String> sggstns = getAutocompleteSuggestions(prfx);
-
                 if (sggstns.isEmpty()) {
                     System.out.println("No suggestions found. Please try a different prefix.");
                 } else {
@@ -124,15 +124,17 @@ public class WordCompletion {
                     if (selection >= 1 && selection <= sggstns.size()) {
                         System.out.println("You selected: " + sggstns.get(selection - 1));
                         running = false; // Exit the loop if a valid selection is made
+                        category = sggstns.get(selection - 1);
                     } else {
                         System.out.println("Invalid selection. Please try again.");
                     }
                 }
             }
+            return category;
         }
         catch (IOException e) {
             e.printStackTrace();
-            return; // Exit if there is an error loading the vocabulary
+            return "Err"; // Exit if there is an error loading the vocabulary
         }
     }
 }

@@ -110,7 +110,7 @@ public class AutomobilePriceAnalysis {
 
             PrintStatements.statementCall(PrintStatements.carCategoryRequest);
             WordCompletion wc = new WordCompletion();
-            wc.wordCompletion(input);
+            String category = wc.wordCompletion(input);
 
             PrintStatements.statementCall(PrintStatements.carBrandRequest);
 
