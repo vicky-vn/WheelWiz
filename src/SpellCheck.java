@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -6,13 +9,20 @@ public class SpellCheck {
 
     private Set<String> vocabulary;
 
-    public SpellCheck() {
+    public SpellCheck(String filePath) {
         vocabulary = new HashSet<>();
-        // Add the fixed list of car brands to the vocabulary
-        vocabulary.add("ford");
-        vocabulary.add("chevrolet");
-        vocabulary.add("hyundai");
-        vocabulary.add("toyota");
+        loadVocabulary(filePath);
+    }
+
+    private void loadVocabulary(String filePath) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                vocabulary.add(line.trim().toLowerCase());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getClosestMatch(String input) {
@@ -21,7 +31,6 @@ public class SpellCheck {
             if (word.equalsIgnoreCase(lowerInput)) {
                 return word;
             }
-            // Implement a more sophisticated spell check algorithm as needed
             if (levenshteinDistance(word, lowerInput) <= 2) {
                 return word;
             }
@@ -50,21 +59,20 @@ public class SpellCheck {
 
     public static String getBrandFromUser(Scanner input, SpellCheck spellChecker) {
         while (true) {
-            String brand = input.nextLine();
+            System.out.println("Please enter the brand name:");
+            String brand = input.nextLine().trim();
             String closestMatch = spellChecker.getClosestMatch(brand);
 
             if (closestMatch == null) {
                 System.out.println("We don't have information for this particular brand.");
                 System.out.println("Do you want to check another brand? (Yes/No)");
-                String response = input.nextLine();
+                String response = input.nextLine().trim();
                 if (response.equalsIgnoreCase("No")) {
                     return null;
-                } else {
-                    System.out.println("Please enter the brand name:");
                 }
             } else if (!brand.equalsIgnoreCase(closestMatch)) {
                 System.out.println("Did you mean: " + closestMatch + "? (Yes/No)");
-                String response = input.nextLine();
+                String response = input.nextLine().trim();
                 if (response.equalsIgnoreCase("Yes")) {
                     return closestMatch;
                 } else {

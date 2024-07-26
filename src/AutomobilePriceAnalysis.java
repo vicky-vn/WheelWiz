@@ -5,7 +5,10 @@ public class AutomobilePriceAnalysis {
 
     public static void main(String[] args) {
 
-        SpellCheck spellChecker = new SpellCheck();
+        // Path to the vocabulary file
+        String vocabularyFilePath = "CarBrands.txt";
+
+        SpellCheck spellChecker = new SpellCheck(vocabularyFilePath);
         SearchFrequency.loadCsvData();
         CarDetails.readCSVsToMap();
 
@@ -116,41 +119,46 @@ public class AutomobilePriceAnalysis {
 
             // Spell check here
             String brand = SpellCheck.getBrandFromUser(input, spellChecker);
-            SearchFrequency.addString(brand); // To increase the count
+            if (brand != null) {
+                SearchFrequency.addString(brand); // To increase the count
 
-            System.out.println("Details generated for customer => " + firstName + " " + lastName);
-            System.out.println("Email: " + email + "\nPhone: " + phoneNumber);
-            System.out.println("\n********************************");
-            System.out.println("********************************");
+                System.out.println("Details generated for customer => " + firstName + " " + lastName);
+                System.out.println("Email: " + email + "\nPhone: " + phoneNumber);
+                System.out.println("\n********************************");
+                System.out.println("********************************");
 
-            SearchFrequency.printTreeByFrequency();
+                SearchFrequency.printTreeByFrequency();
 
-            PrintStatements.statementCall(PrintStatements.lastStatement);
+                PrintStatements.statementCall(PrintStatements.lastStatement);
 
-            while (!input.hasNextInt()) {
-                input.next(); // Consume the invalid input
-                PrintStatements.statementCall(PrintStatements.invalidEntry);
-            }
-            userChoice = input.nextInt();
-            input.nextLine(); // Consume the newline character
-
-            while (true) {
-                if (userChoice == 0) {
-                    isUserChoice = true;
-                    PrintStatements.statementCall(PrintStatements.farewellStatement);
-                    break;
-                } else if (userChoice == 1) {
-                    break;
-                } else {
+                while (!input.hasNextInt()) {
+                    input.next(); // Consume the invalid input
                     PrintStatements.statementCall(PrintStatements.invalidEntry);
-                    PrintStatements.statementCall(PrintStatements.lastStatement);
-                    while (!input.hasNextInt()) {
-                        input.next(); // Consume the invalid input
-                        PrintStatements.statementCall(PrintStatements.invalidEntry);
-                    }
-                    userChoice = input.nextInt();
-                    input.nextLine(); // Consume the newline character
                 }
+                userChoice = input.nextInt();
+                input.nextLine(); // Consume the newline character
+
+                while (true) {
+                    if (userChoice == 0) {
+                        isUserChoice = true;
+                        PrintStatements.statementCall(PrintStatements.farewellStatement);
+                        break;
+                    } else if (userChoice == 1) {
+                        break;
+                    } else {
+                        PrintStatements.statementCall(PrintStatements.invalidEntry);
+                        PrintStatements.statementCall(PrintStatements.lastStatement);
+                        while (!input.hasNextInt()) {
+                            input.next(); // Consume the invalid input
+                            PrintStatements.statementCall(PrintStatements.invalidEntry);
+                        }
+                        userChoice = input.nextInt();
+                        input.nextLine(); // Consume the newline character
+                    }
+                }
+            } else {
+                System.out.println("No valid brand selected. Exiting.");
+                break;
             }
         }
         input.close();
