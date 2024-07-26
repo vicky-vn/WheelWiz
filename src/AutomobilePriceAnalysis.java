@@ -6,7 +6,7 @@ public class AutomobilePriceAnalysis {
     public static void main(String[] args) {
 
         // Path to the vocabulary file
-        String vocabularyFilePath = "CarBrands";
+        String vocabularyFilePath = "CarBrands.txt";
 
         SpellCheck spellChecker = new SpellCheck(vocabularyFilePath);
         SearchFrequency.loadCsvData();
