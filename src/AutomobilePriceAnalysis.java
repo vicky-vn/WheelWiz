@@ -37,6 +37,8 @@ public class AutomobilePriceAnalysis {
             boolean isPhoneNumberValid = false;
             boolean isPriceValid = false;
 
+            FancyASCII.asciiPrint();
+
             PrintStatements.statementCall(PrintStatements.welcomeMsg);
 
             System.out.println("!!!!!!!!!!!!!!!!!!!!Best Deals!!!!!!!!!!!!!!!!!!!!");
