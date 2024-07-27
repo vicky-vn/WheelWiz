@@ -39,6 +39,9 @@ public class AutomobilePriceAnalysis {
 
             PrintStatements.statementCall(PrintStatements.welcomeMsg);
 
+            System.out.println("!!!!!!!!!!!!!!!!!!!!Best Deals!!!!!!!!!!!!!!!!!!!!");
+            BestDeal.findAndPrintBestDeals();
+
             System.out.print("Trending words : ");
             FrequencyCount.getFrequencyCount();
 
