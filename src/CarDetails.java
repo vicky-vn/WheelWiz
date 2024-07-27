@@ -60,8 +60,8 @@ public class CarDetails {
                 String model = (String) carData.get("Model");
                 // Normalize the model to handle spaces, hyphens, and case insensitivity
                 String normalizedModel = model.split("[\\s-]")[0].toLowerCase();
-                // Use the normalized model as the keyword for pageRanker
-                String topUrl = InvertedIndexing.pageRanker(normalizedModel, invertedIndex);
+                // Use the normalized model as the keyword for finding the top URL
+                String topUrl = PageRankCalculator.getTopUrl(normalizedModel);
 
                 System.out.println("----------------------------------------------");
                 System.out.println("Brand: " + carBrand);
