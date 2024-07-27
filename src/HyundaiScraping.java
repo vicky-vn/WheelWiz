@@ -18,14 +18,17 @@ public class HyundaiScraping {
     public static void main(String[] args) {
 
         // Setting up Web Driver
-        System.setProperty("webdriver.chrome.driver", "/Users/vigneshnatarajan/myData/ACC/chromedriver-mac-arm64/chromedriver");
+        String vicky = "/Users/vigneshnatarajan/myData/ACC/chromedriver-mac-arm64/chromedriver";
+        String madhu ="";
+
+        System.setProperty("webdriver.chrome.driver", vicky);
         ChromeOptions options = new ChromeOptions();
         WebDriver driver = new ChromeDriver(options);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         try (CSVWriter csvWriter = new CSVWriter(new FileWriter("scraped_hyundai.csv"))) {
             // Writing the header to CSV
-            String[] header = {"Brand", "Model Name", "Model Year", "Price in CAD", "Category"};
+            String[] header = {"Brand", "Model", "Year", "Price", "Category"};
             csvWriter.writeNext(header);
 
             driver.get("https://www.hyundaicanada.com/en");
