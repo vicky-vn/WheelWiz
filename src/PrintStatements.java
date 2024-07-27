@@ -24,6 +24,8 @@ public class PrintStatements {
 
     static String carBrandRequest = "Please enter the brand you're interested in";
 
+    static String modelRequest = "Enter a model name to see other relevant links:";
+
     static String lastStatement = "Press 1 to analyze again\nPress 0 to exit";
 
     static String invalidEntry = "Invalid Entry";

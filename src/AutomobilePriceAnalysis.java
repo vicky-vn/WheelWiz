@@ -1,28 +1,23 @@
-import java.util.Map;
 import java.util.Scanner;
 
 public class AutomobilePriceAnalysis {
 
     public static void main(String[] args) {
 
-        // Path to the vocabulary file
-        String vocabularyFilePath = "CarBrands.txt";
+        SpellCheck spellChecker = new SpellCheck();
+        WordCompletion wc = new WordCompletion();
 
-        SpellCheck spellChecker = new SpellCheck(vocabularyFilePath);
+        // Create an instance of TrieInvertedIndex
+        TrieInvertedIndex invertedIndex = new TrieInvertedIndex();
+
+        // Create an instance of Trie
+        TrieInvertedIndex.Trie trie = new TrieInvertedIndex.Trie();
+
+        // Optionally, load an existing inverted index from CSV (if available)
+        invertedIndex.loadInvertedIndexFromCSV(trie);
+
         SearchFrequency.loadCsvData();
         CarDetails.readCSVsToMap();
-
-        // Load the inverted index if it exists, otherwise build it
-        Map<String, Map<String, Integer>> invertedIndex;
-        if (new java.io.File(InvertedIndexing.varForIndexFile).exists()) {
-            invertedIndex = InvertedIndexing.loadInvertedIndex();
-        } else {
-            invertedIndex = InvertedIndexing.buildInvertedIndex();
-            InvertedIndexing.saveInvertedIndex(invertedIndex);
-        }
-
-        // Set the inverted index in CarDetails
-        CarDetails.setInvertedIndex(invertedIndex);
 
         Scanner input = new Scanner(System.in);
 
@@ -30,7 +25,7 @@ public class AutomobilePriceAnalysis {
         String lastName = "";
         String email = "";
         String phoneNumber = "";
-        String contactDetails, maxBudgetString;
+        String contactDetails, maxBudgetString, category, modelName;
 
         boolean isUserChoice = false;
         int userChoice, price = 0;
@@ -49,8 +44,6 @@ public class AutomobilePriceAnalysis {
 
             System.out.print("Most Searched : ");
             SearchFrequency.printTreeByFrequency();
-
-            CarDetails.getDetails("Mitsubishi", "SUV & Crossover", 35000);
 
             PrintStatements.statementCall(PrintStatements.welcomeMsg2);
 
@@ -98,6 +91,9 @@ public class AutomobilePriceAnalysis {
                 isPhoneNumberValid = phoneNumber != null && DataExtractionAndValidation.validatePhoneNumber(phoneNumber);
             }
 
+            System.out.println("Email: " + email);
+            System.out.println("Mobile: " + phoneNumber);
+
             PrintStatements.statementCall(PrintStatements.maxBudgetRequest);
             // Price extraction and validation
             while (!isPriceValid) {
@@ -111,9 +107,11 @@ public class AutomobilePriceAnalysis {
                 }
             }
 
+            System.out.println("Price : " + price);
+
             PrintStatements.statementCall(PrintStatements.carCategoryRequest);
-            WordCompletion wc = new WordCompletion();
-            String category = wc.wordCompletion(input);
+            category = wc.wordCompletion(input);
+            SearchFrequency.addString(category); // To increase the count
 
             PrintStatements.statementCall(PrintStatements.carBrandRequest);
 
@@ -129,12 +127,20 @@ public class AutomobilePriceAnalysis {
 
                 SearchFrequency.printTreeByFrequency();
 
+                CarDetails.getDetails(brand, category, price);
+
+                // Inverted Indexing
+                PrintStatements.statementCall(PrintStatements.modelRequest);
+                modelName = input.nextLine().trim().toLowerCase();
+                invertedIndex.printUrlsForKeyword(modelName, trie);
+
                 PrintStatements.statementCall(PrintStatements.lastStatement);
 
                 while (!input.hasNextInt()) {
                     input.next(); // Consume the invalid input
                     PrintStatements.statementCall(PrintStatements.invalidEntry);
                 }
+
                 userChoice = input.nextInt();
                 input.nextLine(); // Consume the newline character
 

@@ -9,6 +9,10 @@ public class SpellCheck {
 
     private Set<String> vocabulary;
 
+    public SpellCheck() {
+        this("CarBrands.txt"); // Default to carbrands.txt if no filePath is provided
+    }
+
     public SpellCheck(String filePath) {
         vocabulary = new HashSet<>();
         loadVocabulary(filePath);
@@ -82,5 +86,15 @@ public class SpellCheck {
                 return brand;
             }
         }
+    }
+
+    public static void main(String[] args) {
+        SpellCheck spellChecker = new SpellCheck();
+        Scanner scanner = new Scanner(System.in);
+        String brand = getBrandFromUser(scanner, spellChecker);
+        if (brand != null) {
+            System.out.println("You selected: " + brand);
+        }
+        scanner.close();
     }
 }
