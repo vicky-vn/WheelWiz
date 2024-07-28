@@ -74,14 +74,8 @@ public class WordCompletion {
                     String[] wordsKeer = lnKeer.split(",");
                     for (int i = 0; i < wordsKeer.length; i++) {
                         String word = wordsKeer[i].trim().replace("\"", "");
-                        if (filePath.contains("scraped_chevrolet.csv")) {
-                            if (i % 3 == 2 && !word.equals("Category")) {
-                                trie.insert(word);
-                            }
-                        } else {
-                            if (i % 5 == 4 && !word.equals("Category")) {
-                                trie.insert(word);
-                            }
+                        if (i % 5 == 4 && !word.equals("Category")) {
+                            trie.insert(word);
                         }
                     }
                 }
