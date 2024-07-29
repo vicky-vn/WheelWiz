@@ -19,7 +19,7 @@ public class HyundaiScraping {
 
         // Setting up Web Driver
         String vicky = "/Users/vigneshnatarajan/myData/ACC/chromedriver-mac-arm64/chromedriver";
-        String madhu ="";
+        String madhu = "C:/Users/madhu/Downloads/chromedriver-win64-updated/chromedriver-win64/chromedriver.exe";
 
         System.setProperty("webdriver.chrome.driver", vicky);
         ChromeOptions options = new ChromeOptions();

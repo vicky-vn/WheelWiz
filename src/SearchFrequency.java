@@ -120,11 +120,6 @@ public class SearchFrequency {
         // Load the existing CSV data into the AVL tree
         loadCsvData();
 
-        // Example usage
-        addString("example");
-        addString("test");
-        addString("example");
-
         // Print the AVL tree in ascending order
         System.out.println("AVL Tree in Ascending Order:");
         avlTree.inOrder(avlTree.getRoot());
@@ -174,9 +169,17 @@ public class SearchFrequency {
     public static void printTreeByFrequency() {
         List<Map.Entry<String, Integer>> nodes = new ArrayList<>(frequencyMap.entrySet());
         nodes.sort((a, b) -> Integer.compare(b.getValue(), a.getValue()));
+
+        int count = 0;
         for (Map.Entry<String, Integer> entry : nodes) {
-            System.out.print("|" + entry.getKey() + " " + entry.getValue() + "| ");
+            if (count < 5) {
+                System.out.print("| " + entry.getKey() + " => " + entry.getValue() + " | ");
+                count++;
+            } else {
+                break;
+            }
         }
         System.out.println();
     }
+
 }

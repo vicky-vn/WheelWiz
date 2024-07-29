@@ -17,9 +17,8 @@ public class MitsubishiScraping {
 
         try {
             // Set the path to the WebDriver executable
-            //String vicky = "/Users/vigneshnatarajan/myData/ACC/chromedriver-mac-arm64/chromedriver";
-            String madhu = "C:\\\\Users\\\\madhu\\\\Downloads\\\\chromedriver-win64\\\\chromedriver-win64\\\\chromedriver.exe";
-            System.setProperty("webdriver.chrome.driver", madhu);
+            String vicky = "/Users/vigneshnatarajan/myData/ACC/chromedriver-mac-arm64/chromedriver";
+            System.setProperty("webdriver.chrome.driver", vicky);
 
             // Initialize WebDriver
             ChromeOptions options = new ChromeOptions();
@@ -80,6 +79,12 @@ public class MitsubishiScraping {
                 System.out.println("Scraped mitsubishi details successfully");
             } catch (IOException e) {
                 System.err.println("Failed to write CSV file: " + e.getMessage());
+            }
+
+            // Print the scraped data in the desired format
+            for (String[] row : carData) {
+                if (row[0].equals("Brand")) continue; // Skip header
+                System.out.println("Brand: " + row[0] + ", Model: " + row[1] + ", Year: " + row[2] + ", Price: " + row[3] + ", Category: " + row[4]);
             }
 
         } catch (Exception exc) {

@@ -14,7 +14,11 @@ import java.util.List;
 public class ChevroletScraping {
     public static void chevroletScraper() {
         // Set the path to the chromedriver executable
-        System.setProperty("webdriver.chrome.driver", "C://Users/Keerthana1/Downloads/chromedriver-win64/chromedriver-win64/chromedriver.exe");
+        String vicky = "/Users/vigneshnatarajan/myData/ACC/chromedriver-mac-arm64/chromedriver";
+        String madhu = "C:/Users/madhu/Downloads/chromedriver-win64-updated/chromedriver-win64/chromedriver.exe";
+        String keerthana ="C://Users/Keerthana1/Downloads/chromedriver-win64/chromedriver-win64/chromedriver.exe";
+
+        System.setProperty("webdriver.chrome.driver",vicky );
 
         // Set ChromeOptions to use Google Chrome for Testing
         ChromeOptions options = new ChromeOptions();
@@ -59,6 +63,7 @@ public class ChevroletScraping {
                     String year = cars.findElement(By.tagName("img")).getAttribute("alt").substring(0, 4);
                     String category = cars.findElement(By.xpath("//ul/li[1]/button")).getText();
 
+                    System.out.println("Brand = Chevrolet");
                     System.out.println("Model = " + carName);
                     System.out.println("Price = " + carPrice);
                     System.out.println("Year = " + year);

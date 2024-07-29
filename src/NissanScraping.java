@@ -19,8 +19,10 @@ public class NissanScraping {
 
         try {
             // Set the path to the WebDriver executable
-            String driverPath = "C:/Users/madhu/Downloads/chromedriver-win64-updated/chromedriver-win64/chromedriver.exe";
-            System.setProperty("webdriver.chrome.driver", driverPath);
+            String madhu = "C:/Users/madhu/Downloads/chromedriver-win64-updated/chromedriver-win64/chromedriver.exe";
+            String vicky = "/Users/vigneshnatarajan/myData/ACC/chromedriver-mac-arm64/chromedriver";
+
+            System.setProperty("webdriver.chrome.driver", madhu);
 
             // Initialize WebDriver
             ChromeOptions options = new ChromeOptions();
