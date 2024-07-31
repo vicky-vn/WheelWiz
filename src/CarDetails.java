@@ -15,7 +15,7 @@ public class CarDetails {
         List<String> filePaths = Arrays.asList(
                 "scraped_mitsubishi.csv",
                 "scraped_hyundai.csv",
-                "scraped_toyota.csv",
+                "scraped_nissan.csv",
                 "scraped_chevrolet.csv");
 
         for (String filePath : filePaths) {

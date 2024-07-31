@@ -8,7 +8,7 @@ public class BestDeal {
     private static final List<String> FILE_PATHS = Arrays.asList(
             "scraped_mitsubishi.csv",
             "scraped_hyundai.csv",
-            "scraped_toyota.csv",
+            "scraped_nissan.csv",
             "scraped_chevrolet.csv");
 
     // Method to find the cheapest car in a CSV file
