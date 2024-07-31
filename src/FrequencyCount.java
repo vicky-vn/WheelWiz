@@ -7,7 +7,7 @@ public class FrequencyCount {
 
     public static void getFrequencyCount() {
         List<String> sourceFiles = Arrays.asList(
-                "scraped_toyota.csv",
+                "scraped_nissan.csv",
                 "scraped_mitsubishi.csv",
                 "scraped_chevrolet.csv",
                 "scraped_hyundai.csv");
@@ -27,7 +27,7 @@ public class FrequencyCount {
         int SNo = 1;
         for (int i = 0; i < Math.min(topNWords, wordCountList.size()); i++) {
             Map.Entry<String, Integer> entry = wordCountList.get(i);
-            System.out.print("| " + entry.getKey() + " " +entry.getValue() +" | ");
+            System.out.print("| " + entry.getKey() + " => " +entry.getValue() +" | ");
             SNo++;
         }
         System.out.println();
@@ -106,15 +106,6 @@ public class FrequencyCount {
         }
         Collections.swap(list, i + 1, high);
         return i + 1;
-    }
-
-    public static void printAll(List<Map.Entry<String, Integer>> wordCountList) {
-        int SNo = 1;
-        for (Map.Entry<String, Integer> entry : wordCountList) {
-            System.out.println(SNo + ") " + entry.getKey() + " : " + entry.getValue());
-            SNo++;
-        }
-        System.out.println("**********************************");
     }
 
     public static void main(String[] args) {

@@ -17,14 +17,16 @@ public class WebCrawler {
 
     public static void main(String[] args) {
         String[] sites = {
-                "https://toyota.ca",
+                "https://nissan.ca",
                 "https://hyundaicanada.com",
                 "https://chevrolet.ca",
                 "https://mitsubishi-motors.ca"
         };
 
         WebCrawler crawler = new WebCrawler();
+        System.out.println("Crawling has commenced...");
         crawler.startCrawling(sites);
+        System.out.println("Crawling completed. URLs have been entered into the CSV file.");
     }
 
     public void startCrawling(String[] sites) {
@@ -61,11 +63,11 @@ public class WebCrawler {
                 String linkHref = varForLink.attr("abs:href");
                 if (!visitedUrls.contains(linkHref) && linkHref.startsWith("http")) {
                     visitedUrls.add(linkHref); // Add to visited list to avoid duplicate crawling
-                    writer.writeNext(new String[] { linkHref });
+                    writer.writeNext(new String[]{linkHref});
                     count++;
                 }
             }
-            writer.writeNext(new String[] { url });
+            writer.writeNext(new String[]{url});
         } catch (IOException emsg) {
             System.err.println("Error occurred while crawling " + url + ": " + emsg.getMessage());
         }

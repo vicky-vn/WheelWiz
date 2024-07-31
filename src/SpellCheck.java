@@ -63,7 +63,7 @@ public class SpellCheck {
 
     public static String getBrandFromUser(Scanner input, SpellCheck spellChecker) {
         while (true) {
-            System.out.println("Please enter the brand name:");
+            System.out.println("\nPlease enter the brand name:");
             String brand = input.nextLine().trim();
             String closestMatch = spellChecker.getClosestMatch(brand);
 
