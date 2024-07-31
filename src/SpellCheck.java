@@ -1,56 +1,61 @@
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
+import java.io.FileReader;
 
 public class SpellCheck {
 
-    private Set<String> vocabulary;
+    private Set<String> vocabulary; // Set to store vocabulary words
 
+    // C_o_n_s_t_r_u_c_t_o_r that initializes with a default file if none is provided
     public SpellCheck() {
-        this("CarBrands.txt"); // Default to carbrands.txt if no filePath is provided
+        this("CarBrands.txt"); // Use default file for car brands
     }
 
+    // C_o_n_s_t_r_u_c_t_o_r that takes a file path to load the vocabulary
     public SpellCheck(String filePath) {
-        vocabulary = new HashSet<>();
-        loadVocabulary(filePath);
+        vocabulary = new HashSet<>(); // Initialize the vocabulary set
+        loadVocabulary(filePath); // Load vocabulary from the specified file
     }
 
+    // calculate_vocab
     private void loadVocabulary(String filePath) {
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) { // Try to open and read the file
             String line;
-            while ((line = br.readLine()) != null) {
-                vocabulary.add(line.trim().toLowerCase());
+            while ((line = br.readLine()) != null) { // Read each line from the file
+                vocabulary.add(line.trim().toLowerCase()); // Add the word to the vocabulary set
             }
-        } catch (IOException e) {
+        } catch (IOException e) { // Handle any IO exceptions
             e.printStackTrace();
         }
     }
 
+    // Method to get the closest matching word from the vocabulary
     public String getClosestMatch(String input) {
-        String lowerInput = input.toLowerCase();
-        for (String word : vocabulary) {
-            if (word.equalsIgnoreCase(lowerInput)) {
+        String lowerInput = input.toLowerCase(); // Convert input to lowercase
+        for (String word : vocabulary) { // Loop through each word in the vocabulary
+            if (word.equalsIgnoreCase(lowerInput)) { // Check if the word matches exactly
                 return word;
             }
-            if (levenshteinDistance(word, lowerInput) <= 2) {
+            if (levenshteinDistance(word, lowerInput) <= 2) { // Check if the word is within a Levenshtein distance of 2
                 return word;
             }
         }
-        return null;
+        return null; // Return null if no close match is found
     }
 
+    // Method_to_cal_Levenshtein_dist_btwn_2_strings
     private int levenshteinDistance(String a, String b) {
-        int[][] dp = new int[a.length() + 1][b.length() + 1];
-        for (int i = 0; i <= a.length(); i++) {
-            for (int j = 0; j <= b.length(); j++) {
-                if (i == 0) {
-                    dp[i][j] = j;
-                } else if (j == 0) {
-                    dp[i][j] = i;
-                } else {
+        int[][] dp = new int[a.length() + 1][b.length() + 1]; // Create a DP table
+        for (int i = 0; i <= a.length(); i++) { // Loop through str a
+            for (int j = 0; j <= b.length(); j++) { // Loop through str b
+                if (i == 0) { // If in case str is empty
+                    dp[i][j] = j; // Initialize dp table
+                } else if (j == 0) { // If second string is empty
+                    dp[i][j] = i; // Initialize dp table
+                } else { // Calculate minimum cost
                     dp[i][j] = Math.min(dp[i - 1][j - 1]
                                     + (a.charAt(i - 1) == b.charAt(j - 1) ? 0 : 1),
                             Math.min(dp[i - 1][j] + 1,
@@ -58,43 +63,45 @@ public class SpellCheck {
                 }
             }
         }
-        return dp[a.length()][b.length()];
+        return dp[a.length()][b.length()]; // Return the Levenshtein distance
     }
 
+    // Method to interact with the user and get a valid car brand name
     public static String getBrandFromUser(Scanner input, SpellCheck spellChecker) {
-        while (true) {
-            System.out.println("\nPlease enter the brand name:");
-            String brand = input.nextLine().trim();
-            String closestMatch = spellChecker.getClosestMatch(brand);
+        while (true) { // Loop until a valid brand is obtained
+            System.out.println("\nPlease enter the brand name:"); // Prompt user for brand name
+            String brand = input.nextLine().trim(); // Read and trim the input
+            String closestMatch = spellChecker.getClosestMatch(brand); // Get closest match from the spell checker
 
-            if (closestMatch == null) {
-                System.out.println("We don't have information for this particular brand.");
-                System.out.println("Do you want to check another brand? (Yes/No)");
-                String response = input.nextLine().trim();
-                if (response.equalsIgnoreCase("No")) {
-                    return null;
+            if (closestMatch == null) { // If no close match is found
+                System.out.println("We don't have information for this particular brand."); // Inform the user
+                System.out.println("Do you want to check another brand? (Yes/No)"); // Ask if they want to try again
+                String response = input.nextLine().trim(); // Read user's response
+                if (response.equalsIgnoreCase("No")) { // If the user says no
+                    return null; // Exit the method
                 }
-            } else if (!brand.equalsIgnoreCase(closestMatch)) {
-                System.out.println("Did you mean: " + closestMatch + "? (Yes/No)");
-                String response = input.nextLine().trim();
-                if (response.equalsIgnoreCase("Yes")) {
-                    return closestMatch;
-                } else {
-                    System.out.println("Please enter the correct brand name:");
+            } else if (!brand.equalsIgnoreCase(closestMatch)) { // If a close match is found but not exact
+                System.out.println("Did you mean: " + closestMatch + "? (Yes/No)"); // Ask the user if they meant the close match
+                String response = input.nextLine().trim(); // Read user's response
+                if (response.equalsIgnoreCase("Yes")) { // If the user confirms
+                    return closestMatch; // Return the close match
+                } else { // If the user does not confirm
+                    System.out.println("Please enter the correct brand name:"); // Ask for the correct brand name
                 }
-            } else {
-                return brand;
+            } else { // If an exact match is found
+                return brand; // Return the brand
             }
         }
     }
 
+    // main_method_to_spell_check
     public static void main(String[] args) {
-        SpellCheck spellChecker = new SpellCheck();
-        Scanner scanner = new Scanner(System.in);
-        String brand = getBrandFromUser(scanner, spellChecker);
-        if (brand != null) {
-            System.out.println("You selected: " + brand);
+        SpellCheck spellChecker = new SpellCheck(); // Create a spell checker with the default file
+        Scanner scanner = new Scanner(System.in); // Create a scanner to read user input
+        String brand = getBrandFromUser(scanner, spellChecker); // Get a valid brand from the user
+        if (brand != null) { // If a valid brand is obtained
+            System.out.println("You selected: " + brand); // Print the selected brand
         }
-        scanner.close();
+        scanner.close(); // Close the scanner
     }
 }
