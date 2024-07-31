@@ -6,10 +6,12 @@ import java.util.*;
 public class CarDetails {
     private static List<Map<String, Object>> carDataList = new ArrayList<>();
     private static Map<String, Map<String, Integer>> invertedIndex = new HashMap<>();
+    private static Set<String> validModels = new HashSet<>();
 
     // Method to read multiple CSV files and merge their data into carDataList
     public static void readCSVsToMap() {
         carDataList.clear(); // Clear the list before reading new data
+        validModels.clear(); // Clear the valid models set before reading new data
 
         // List of file paths to read
         List<String> filePaths = Arrays.asList(
@@ -32,6 +34,12 @@ public class CarDetails {
                         }
                     }
                     carDataList.add(carData);
+
+                    // Add model to validModels set
+                    String model = (String) carData.get("Model");
+                    if (model != null && !model.isEmpty()) {
+                        validModels.add(model.toLowerCase());
+                    }
                 }
             } catch (IOException e) {
                 System.err.println("Error reading CSV file: " + e.getMessage());
@@ -63,14 +71,14 @@ public class CarDetails {
                 // Use the normalized model as the keyword for finding the top URL
                 String topUrl = PageRankCalculator.getTopUrl(normalizedModel);
 
-                System.out.println("----------------------------------------------");
+                System.out.println("------------------------------------------------------------------------------");
                 System.out.println("Brand: " + carBrand);
                 System.out.println("Model: " + model);
                 System.out.println("Year: " + carData.get("Year"));
                 System.out.println("Price: $" + carPrice);
                 System.out.println("Category: " + carCategory);
                 System.out.println("Top URL: " + topUrl);
-                System.out.println("---------------------------------------------");
+                System.out.println("------------------------------------------------------------------------------");
                 found = true;
             }
         }
@@ -78,5 +86,10 @@ public class CarDetails {
         if (!found) {
             System.out.println("No data found");
         }
+    }
+
+    // Method to check if the model name is valid
+    public static boolean isValidModel(String modelName) {
+        return validModels.contains(modelName.toLowerCase());
     }
 }

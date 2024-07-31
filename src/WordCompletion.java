@@ -100,7 +100,7 @@ public class WordCompletion {
 
             boolean running = true;
             String category = "";
-            System.out.print("Enter the prefix of the Category for autocomplete or Press 'Enter' if not sure: ");
+            System.out.print("\nEnter the prefix of the Category for autocomplete or Press 'Enter' if not sure: ");
             String prfx = scnnrKeer.nextLine();
             List<String> sggstns = getAutocompleteSuggestions(prfx);
             while (running) {

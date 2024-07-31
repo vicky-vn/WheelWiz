@@ -14,36 +14,36 @@ public class FrequencyCount {
 
         int topNWords = 5;
 
-        Map<String, Integer> wordCountMap = new HashMap<>();
+        Map<String, Integer> varForWCMap = new HashMap<>();
 
         for (String sourceFile : sourceFiles) {
-            processFile(sourceFile, wordCountMap);
+            processFile(sourceFile, varForWCMap);
         }
 
-        List<Map.Entry<String, Integer>> wordCountList = new ArrayList<>(wordCountMap.entrySet());
+        List<Map.Entry<String, Integer>> varForWCList = new ArrayList<>(varForWCMap.entrySet());
 
-        quickSort(wordCountList, 0, wordCountList.size() - 1);
+        methodForQuickSort(varForWCList, 0, varForWCList.size() - 1);
 
-        int SNo = 1;
-        for (int i = 0; i < Math.min(topNWords, wordCountList.size()); i++) {
-            Map.Entry<String, Integer> entry = wordCountList.get(i);
-            System.out.print("| " + entry.getKey() + " " +entry.getValue() +" | ");
-            SNo++;
+        int varForSNo = 1;
+        for (int i = 0; i < Math.min(topNWords, varForWCList.size()); i++) {
+            Map.Entry<String, Integer> entry = varForWCList.get(i);
+            System.out.print("| " + entry.getKey() + " => " +entry.getValue() +" | ");
+            varForSNo++;
         }
         System.out.println();
     }
 
     private static void processFile(String sourceFile, Map<String, Integer> wordCountMap) {
-        try (BufferedReader br = new BufferedReader(new FileReader(sourceFile))) {
-            String line = br.readLine(); // Read the header line
-            if (line != null) {
-                String[] headers = parseCSVLine(line);
+        try (BufferedReader VNbr = new BufferedReader(new FileReader(sourceFile))) {
+            String varForLine = VNbr.readLine(); // Read the header varForLine
+            if (varForLine != null) {
+                String[] headers = parseCSVLine(varForLine);
                 int categoryIndex = -1;
 
                 // Find the index of the 'category' column
-                for (int i = 0; i < headers.length; i++) {
-                    if (headers[i].equalsIgnoreCase("category")) {
-                        categoryIndex = i;
+                for (int varFori = 0; varFori < headers.length; varFori++) {
+                    if (headers[varFori].equalsIgnoreCase("category")) {
+                        categoryIndex = varFori;
                         break;
                     }
                 }
@@ -53,9 +53,9 @@ public class FrequencyCount {
                     return;
                 }
 
-                // Process the remaining lines
-                while ((line = br.readLine()) != null) {
-                    String[] columns = parseCSVLine(line);
+                // Process remaining lines
+                while ((varForLine = VNbr.readLine()) != null) {
+                    String[] columns = parseCSVLine(varForLine);
                     if (columns.length > categoryIndex) {
                         String word = columns[categoryIndex].trim().toLowerCase();
                         if (!word.isEmpty()) {
@@ -73,48 +73,40 @@ public class FrequencyCount {
         List<String> values = new ArrayList<>();
         StringBuilder current = new StringBuilder();
         boolean inQuotes = false;
-        for (char c : line.toCharArray()) {
-            if (c == '\"') {
+        for (char varForc : line.toCharArray()) {
+            if (varForc == '\"') {
                 inQuotes = !inQuotes;
-            } else if (c == ',' && !inQuotes) {
+            } else if (varForc == ',' && !inQuotes) {
                 values.add(current.toString());
                 current = new StringBuilder();
             } else {
-                current.append(c);
+                current.append(varForc);
             }
         }
         values.add(current.toString()); // add last value
         return values.toArray(new String[0]);
     }
 
-    private static void quickSort(List<Map.Entry<String, Integer>> list, int low, int high) {
-        if (low < high) {
-            int pivotIndex = partition(list, low, high);
-            quickSort(list, low, pivotIndex - 1);
-            quickSort(list, pivotIndex + 1, high);
+    //Q_u_i_c_k_S_o_r_t
+    private static void methodForQuickSort(List<Map.Entry<String, Integer>> list, int paramForLow, int paramForHigh) {
+        if (paramForLow < paramForHigh) {
+            int pivotIndex = methodForPartition(list, paramForLow, paramForHigh);
+            methodForQuickSort(list, paramForLow, pivotIndex - 1);
+            methodForQuickSort(list, pivotIndex + 1, paramForHigh);
         }
     }
-
-    private static int partition(List<Map.Entry<String, Integer>> list, int low, int high) {
-        int pivot = list.get(high).getValue();
-        int i = (low - 1);
-        for (int j = low; j < high; j++) {
-            if (list.get(j).getValue() > pivot) {
-                i++;
-                Collections.swap(list, i, j);
+    //P_a_r_t_i_t_i_o_n
+    private static int methodForPartition(List<Map.Entry<String, Integer>> list, int paramForLow, int paramForHigh) {
+        int varForPivot = list.get(paramForHigh).getValue();
+        int varForI = (paramForLow - 1);
+        for (int varForJ = paramForLow; varForJ < paramForHigh; varForJ++) {
+            if (list.get(varForJ).getValue() > varForPivot) {
+                varForI++;
+                Collections.swap(list, varForI, varForJ);
             }
         }
-        Collections.swap(list, i + 1, high);
-        return i + 1;
-    }
-
-    public static void printAll(List<Map.Entry<String, Integer>> wordCountList) {
-        int SNo = 1;
-        for (Map.Entry<String, Integer> entry : wordCountList) {
-            System.out.println(SNo + ") " + entry.getKey() + " : " + entry.getValue());
-            SNo++;
-        }
-        System.out.println("**********************************");
+        Collections.swap(list, varForI + 1, paramForHigh);
+        return varForI + 1;
     }
 
     public static void main(String[] args) {

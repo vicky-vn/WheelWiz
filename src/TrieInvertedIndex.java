@@ -84,15 +84,22 @@ public class TrieInvertedIndex {
         return extractKeywordsFromText(text);
     }
 
-    public String[] extractKeywordsFromText(String VarFortext) {
-        String[] words = VarFortext.split("\\W+");
+    public String[] extractKeywordsFromText(String varForText) {
+        String[] words = varForText.split("\\W+");
         List<String> keywords = new ArrayList<>();
         for (String word : words) {
-            if (!varForStoppers.contains(word.toLowerCase()) && word.length() > 1) {
-                keywords.add(word.toLowerCase());
+            String normalizedWord = normalizeKeyword(word);
+            if (!varForStoppers.contains(normalizedWord) && normalizedWord.length() > 1) {
+                keywords.add(normalizedWord);
             }
         }
         return keywords.toArray(new String[0]);
+    }
+
+    private String normalizeKeyword(String keyword) {
+        // Convert to lowercase and take the part before any special character or space
+        String normalized = keyword.toLowerCase().split("[\\W_]+")[0];
+        return normalized;
     }
 
     private List<String> readUrls() {
@@ -132,7 +139,7 @@ public class TrieInvertedIndex {
     }
 
     public void printUrlsForKeyword(String keyword, Trie trie) {
-        Map<String, Integer> urlsForKeyword = trie.search(keyword.toLowerCase());
+        Map<String, Integer> urlsForKeyword = trie.search(normalizeKeyword(keyword));
         if (urlsForKeyword.isEmpty()) {
             System.out.println("No URLs found for keyword: " + keyword);
         } else {

@@ -25,7 +25,7 @@ public class AutomobilePriceAnalysis {
         String lastName = "";
         String email = "";
         String phoneNumber = "";
-        String contactDetails, maxBudgetString, category, modelName;
+        String contactDetails, maxBudgetString, category;
 
         boolean isUserChoice = false;
         int userChoice, price = 0;
@@ -37,17 +37,25 @@ public class AutomobilePriceAnalysis {
             boolean isPhoneNumberValid = false;
             boolean isPriceValid = false;
 
-            FancyASCII.asciiPrint();
+            System.out.print("*******************************************************************************************");
 
+            System.out.println("\n" +
+                    "██╗    ██╗██╗  ██╗███████╗███████╗██╗     ██╗    ██╗██╗███████╗\n" +
+                    "██║    ██║██║  ██║██╔════╝██╔════╝██║     ██║    ██║██║╚══███╔╝\n" +
+                    "██║ █╗ ██║███████║█████╗  █████╗  ██║     ██║ █╗ ██║██║  ███╔╝ \n" +
+                    "██║███╗██║██╔══██║██╔══╝  ██╔══╝  ██║     ██║███╗██║██║ ███╔╝  \n" +
+                    "╚███╔███╔╝██║  ██║███████╗███████╗███████╗╚███╔███╔╝██║███████╗\n" +
+                    " ╚══╝╚══╝ ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝ ╚══╝╚══╝ ╚═╝╚══════╝" );
+            System.out.println("*******************************************************************************************");
             PrintStatements.statementCall(PrintStatements.welcomeMsg);
 
-            System.out.println("!!!!!!!!!!!!!!!!!!!!Best Deals!!!!!!!!!!!!!!!!!!!!");
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Best Deals!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             BestDeal.findAndPrintBestDeals();
 
-            System.out.print("Trending words : ");
+            System.out.print("\nTrending Categories : ");
             FrequencyCount.getFrequencyCount();
 
-            System.out.print("Most Searched : ");
+            System.out.print("\nMost Searched : ");
             SearchFrequency.printTreeByFrequency();
 
             PrintStatements.statementCall(PrintStatements.welcomeMsg2);
@@ -114,11 +122,8 @@ public class AutomobilePriceAnalysis {
 
             System.out.println("Price : " + price);
 
-            PrintStatements.statementCall(PrintStatements.carCategoryRequest);
             category = wc.wordCompletion(input);
             SearchFrequency.addString(category); // To increase the count
-
-            PrintStatements.statementCall(PrintStatements.carBrandRequest);
 
             // Spell check here
             String brand = SpellCheck.getBrandFromUser(input, spellChecker);
@@ -127,17 +132,30 @@ public class AutomobilePriceAnalysis {
 
                 System.out.println("Details generated for customer => " + firstName + " " + lastName);
                 System.out.println("Email: " + email + "\nPhone: " + phoneNumber);
-                System.out.println("\n********************************");
-                System.out.println("********************************");
 
+                System.out.print("\n------------------------------------------------------------------------------");
+                System.out.print("\nMost Searched : ");
                 SearchFrequency.printTreeByFrequency();
 
                 CarDetails.getDetails(brand, category, price);
 
                 // Inverted Indexing
                 PrintStatements.statementCall(PrintStatements.modelRequest);
-                modelName = input.nextLine().trim().toLowerCase();
-                invertedIndex.printUrlsForKeyword(modelName, trie);
+                boolean isValidModel = false;
+                while (true) {
+                    String modelName = input.nextLine().trim().toLowerCase();
+                    if (modelName.equals("0")) {
+                        break;
+                    }
+                    if (CarDetails.isValidModel(modelName)) {
+                        invertedIndex.printUrlsForKeyword(modelName, trie);
+                        isValidModel = true;
+                    } else {
+                        System.out.println("Invalid model name. Please enter a valid model or press 0 to exit.");
+                    }
+                    // Prompt user to enter model name again or press 0
+                    PrintStatements.statementCall(PrintStatements.modelRequest);
+                }
 
                 PrintStatements.statementCall(PrintStatements.lastStatement);
 

@@ -22,7 +22,7 @@ public class NissanScraping {
             String madhu = "C:/Users/madhu/Downloads/chromedriver-win64-updated/chromedriver-win64/chromedriver.exe";
             String vicky = "/Users/vigneshnatarajan/myData/ACC/chromedriver-mac-arm64/chromedriver";
 
-            System.setProperty("webdriver.chrome.driver", madhu);
+            System.setProperty("webdriver.chrome.driver", vicky);
 
             // Initialize WebDriver
             ChromeOptions options = new ChromeOptions();

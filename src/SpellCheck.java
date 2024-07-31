@@ -1,4 +1,3 @@
-//imp neccessary files
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashSet;
@@ -70,7 +69,7 @@ public class SpellCheck {
     // Method to interact with the user and get a valid car brand name
     public static String getBrandFromUser(Scanner input, SpellCheck spellChecker) {
         while (true) { // Loop until a valid brand is obtained
-            System.out.println("Please enter the brand name:"); // Prompt user for brand name
+            System.out.println("\nPlease enter the brand name:"); // Prompt user for brand name
             String brand = input.nextLine().trim(); // Read and trim the input
             String closestMatch = spellChecker.getClosestMatch(brand); // Get closest match from the spell checker
 
