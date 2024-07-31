@@ -1,40 +1,40 @@
 import java.io.*;
 import java.util.*;
 
-class TrieNodeKeer {
-    Map<Character, TrieNodeKeer> chldrn;
-    boolean isEndOfWordKeer;
+class TrieNodeWCKeer {
+    Map<Character, TrieNodeWCKeer> chldrnWC;
+    boolean isEndOfWordWCKeer;
     String word; // Store the actual word at the end node
 
-    TrieNodeKeer() {
-        chldrn = new HashMap<>();
-        isEndOfWordKeer = false;
+    TrieNodeWCKeer() {
+        chldrnWC = new HashMap<>();
+        isEndOfWordWCKeer = false;
         word = null;
     }
 }
 
-class TrieKeer {
-    private TrieNodeKeer root;
+class TrieWCKeer {
+    private TrieNodeWCKeer root;
 
-    TrieKeer() {
-        root = new TrieNodeKeer();
+    TrieWCKeer() {
+        root = new TrieNodeWCKeer();
     }
 
-    public void insert(String word) {
-        TrieNodeKeer current = root;
+    public void insertWC(String word) {
+        TrieNodeWCKeer current = root;
         String lowerCaseWord = word.toLowerCase(); // Convert word to lowercase for the Trie structure
         for (char chKeer : lowerCaseWord.toCharArray()) {
-            current = current.chldrn.computeIfAbsent(chKeer, c -> new TrieNodeKeer());
+            current = current.chldrnWC.computeIfAbsent(chKeer, c -> new TrieNodeWCKeer());
         }
-        current.isEndOfWordKeer = true;
+        current.isEndOfWordWCKeer = true;
         current.word = word; // Store the original word at the end node
     }
 
-    private TrieNodeKeer findNodeWithPrefix(String prfx) {
-        TrieNodeKeer crrnt = root;
+    private TrieNodeWCKeer findNodeWithPrefix(String prfx) {
+        TrieNodeWCKeer crrnt = root;
         prfx = prfx.toLowerCase(); // Convert prefix to lowercase
         for (char chKeer : prfx.toCharArray()) {
-            crrnt = crrnt.chldrn.get(chKeer);
+            crrnt = crrnt.chldrnWC.get(chKeer);
             if (crrnt == null) {
                 return null;
             }
@@ -42,20 +42,20 @@ class TrieKeer {
         return crrnt;
     }
 
-    private void collectWords(TrieNodeKeer node, List<String> wordList) {
+    private void collectWords(TrieNodeWCKeer node, List<String> wordList) {
         if (node == null) {
             return;
         }
-        if (node.isEndOfWordKeer) {
+        if (node.isEndOfWordWCKeer) {
             wordList.add(node.word); // Add the original word
         }
-        for (Map.Entry<Character, TrieNodeKeer> entry : node.chldrn.entrySet()) {
+        for (Map.Entry<Character, TrieNodeWCKeer> entry : node.chldrnWC.entrySet()) {
             collectWords(entry.getValue(), wordList);
         }
     }
 
     public List<String> getWordsWithPrefix(String prefix) {
-        TrieNodeKeer node = findNodeWithPrefix(prefix);
+        TrieNodeWCKeer node = findNodeWithPrefix(prefix);
         List<String> wordList = new ArrayList<>();
         collectWords(node, wordList);
         return wordList;
@@ -64,7 +64,7 @@ class TrieKeer {
 
 public class WordCompletion {
 
-    private TrieKeer trie = new TrieKeer();
+    private TrieWCKeer trie = new TrieWCKeer();
 
     public void loadVocabulary(String[] filePaths) throws IOException {
         for (String filePath : filePaths) {
@@ -75,7 +75,7 @@ public class WordCompletion {
                     for (int i = 0; i < wordsKeer.length; i++) {
                         String word = wordsKeer[i].trim().replace("\"", "");
                         if (i % 5 == 4 && !word.equals("Category")) {
-                            trie.insert(word);
+                            trie.insertWC(word);
                         }
                     }
                 }

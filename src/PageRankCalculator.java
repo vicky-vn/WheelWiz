@@ -12,23 +12,22 @@ public class PageRankCalculator {
 
     public static Map<String, RedBlackTree> readCsv(String inputCsvFile) {
         Map<String, RedBlackTree> pageKeywordFrequency = new HashMap<>();
-        String line;
+        String linePR;
         String csvSplitBy = ",";
 
-        try (BufferedReader br = new BufferedReader(new FileReader(inputCsvFile))) {
-            // Skip the header line
-            br.readLine();
+        try (BufferedReader brPgRank = new BufferedReader(new FileReader(inputCsvFile))) {
+            brPgRank.readLine();
 
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split(csvSplitBy);
-                if (data.length != 3) {
+            while ((linePR = brPgRank.readLine()) != null) {
+                String[] dataPR = linePR.split(csvSplitBy);
+                if (dataPR.length != 3) {
                     continue; // Skip invalid lines
                 }
-                String keyword = data[0].trim().toLowerCase();
-                String url = data[1].trim().toLowerCase();
+                String keyword = dataPR[0].trim().toLowerCase();
+                String url = dataPR[1].trim().toLowerCase();
                 int occurrences;
                 try {
-                    occurrences = Integer.parseInt(data[2].trim());
+                    occurrences = Integer.parseInt(dataPR[2].trim());
                 } catch (NumberFormatException e) {
                     continue; // Skip lines with invalid occurrences
                 }
@@ -61,15 +60,15 @@ public class PageRankCalculator {
     }
 
     public static void writeRankedCsv(String outputCsvFile, List<PageRank> rankedUrls) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputCsvFile))) {
+        try (BufferedWriter bwPR = new BufferedWriter(new FileWriter(outputCsvFile))) {
             // Write header
-            bw.write("URL,Occurrences,Rank");
-            bw.newLine();
+            bwPR.write("URL,Occurrences,Rank");
+            bwPR.newLine();
 
-            for (int i = 0; i < rankedUrls.size(); i++) {
-                PageRank pageRank = rankedUrls.get(i);
-                bw.write(pageRank.url + "," + pageRank.frequency + "," + (i + 1));
-                bw.newLine();
+            for (int ipg = 0; ipg < rankedUrls.size(); ipg++) {
+                PageRank pageRank = rankedUrls.get(ipg);
+                bwPR.write(pageRank.url + "," + pageRank.frequency + "," + (ipg + 1));
+                bwPR.newLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -100,7 +99,7 @@ public class PageRankCalculator {
         private class Node {
             String url;
             int frequency;
-            Node left, right, parent;
+            Node left, right, prnt;
             boolean color;
 
             Node(String url, int frequency) {
@@ -115,71 +114,71 @@ public class PageRankCalculator {
         private void rotateLeft(Node node) {
             Node rightChild = node.right;
             node.right = rightChild.left;
-            if (rightChild.left != null) rightChild.left.parent = node;
-            rightChild.parent = node.parent;
-            if (node.parent == null) root = rightChild;
-            else if (node == node.parent.left) node.parent.left = rightChild;
-            else node.parent.right = rightChild;
+            if (rightChild.left != null) rightChild.left.prnt = node;
+            rightChild.prnt = node.prnt;
+            if (node.prnt == null) root = rightChild;
+            else if (node == node.prnt.left) node.prnt.left = rightChild;
+            else node.prnt.right = rightChild;
             rightChild.left = node;
-            node.parent = rightChild;
+            node.prnt = rightChild;
         }
 
         private void rotateRight(Node node) {
             Node leftChild = node.left;
             node.left = leftChild.right;
-            if (leftChild.right != null) leftChild.right.parent = node;
-            leftChild.parent = node.parent;
-            if (node.parent == null) root = leftChild;
-            else if (node == node.parent.right) node.parent.right = leftChild;
-            else node.parent.left = leftChild;
+            if (leftChild.right != null) leftChild.right.prnt = node;
+            leftChild.prnt = node.prnt;
+            if (node.prnt == null) root = leftChild;
+            else if (node == node.prnt.right) node.prnt.right = leftChild;
+            else node.prnt.left = leftChild;
             leftChild.right = node;
-            node.parent = leftChild;
+            node.prnt = leftChild;
         }
 
         private void fixInsert(Node node) {
-            Node parent, grandParent;
+            Node prnt, grandParent;
 
-            while (node != root && node.color == RED && node.parent.color == RED) {
-                parent = node.parent;
-                grandParent = parent.parent;
+            while (node != root && node.color == RED && node.prnt.color == RED) {
+                prnt = node.prnt;
+                grandParent = prnt.prnt;
 
-                if (parent == grandParent.left) {
+                if (prnt == grandParent.left) {
                     Node uncle = grandParent.right;
                     if (uncle != null && uncle.color == RED) {
                         grandParent.color = RED;
-                        parent.color = BLACK;
+                        prnt.color = BLACK;
                         uncle.color = BLACK;
                         node = grandParent;
                     } else {
-                        if (node == parent.right) {
-                            rotateLeft(parent);
-                            node = parent;
-                            parent = node.parent;
+                        if (node == prnt.right) {
+                            rotateLeft(prnt);
+                            node = prnt;
+                            prnt = node.prnt;
                         }
                         rotateRight(grandParent);
-                        boolean temp = parent.color;
-                        parent.color = grandParent.color;
+                        boolean temp = prnt.color;
+                        prnt.color = grandParent.color;
                         grandParent.color = temp;
-                        node = parent;
+                        node = prnt;
                     }
                 } else {
                     Node uncle = grandParent.left;
                     if (uncle != null && uncle.color == RED) {
                         grandParent.color = RED;
-                        parent.color = BLACK;
+                        prnt.color = BLACK;
                         uncle.color = BLACK;
                         node = grandParent;
                     } else {
-                        if (node == parent.left) {
-                            rotateRight(parent);
-                            node = parent;
-                            parent = node.parent;
+                        if (node == prnt.left) {
+                            rotateRight(prnt);
+                            node = prnt;
+                            prnt = node.prnt;
                         }
                         rotateLeft(grandParent);
-                        boolean temp = parent.color;
-                        parent.color = grandParent.color;
+                        boolean temp = prnt.color;
+                        prnt.color = grandParent.color;
                         grandParent.color = temp;
-                        node = parent;
+                        node = prnt;
                     }
                 }
             }
@@ -194,9 +193,9 @@ public class PageRankCalculator {
                 return;
             }
 
-            Node current = root, parent = null;
+            Node current = root, prnt = null;
             while (current != null) {
-                parent = current;
+                prnt = current;
                 if (url.compareTo(current.url) < 0)
                     current = current.left;
                 else if (url.compareTo(current.url) > 0)
@@ -207,11 +206,11 @@ public class PageRankCalculator {
                 }
             }
 
-            newNode.parent = parent;
-            if (url.compareTo(parent.url) < 0)
-                parent.left = newNode;
+            newNode.prnt = prnt;
+            if (url.compareTo(prnt.url) < 0)
+                prnt.left = newNode;
             else
-                parent.right = newNode;
+                prnt.right = newNode;
 
             fixInsert(newNode);
         }
