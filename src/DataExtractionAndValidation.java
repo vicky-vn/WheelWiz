@@ -82,28 +82,36 @@ public class DataExtractionAndValidation {
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(System.in);
 
-        // Prompt the user to enter an email and phone number
-        System.out.println("Please enter your email ID and phone number in a single line:");
-        String userInput = scanner.nextLine();
+            // Prompt the user to enter an email and phone number
+            System.out.println("Please enter your email ID and phone number in a single line:");
+            String userInput = scanner.nextLine();
 
-        // Extract email and phone number from the input
-        String email = extractEmail(userInput);
-        String phoneNumber = extractPhoneNumber(userInput);
+            // Extract email and phone number from the input
+            String email = extractEmail(userInput);
+            String phoneNumber = extractPhoneNumber(userInput);
 
-        // Validate the extracted email and phone number
-        boolean isEmailValid = validateEmail(email);
-        boolean isPhoneNumberValid = validatePhoneNumber(phoneNumber);
+            // Validate the extracted email and phone number
+            boolean isEmailValid = validateEmail(email);
+            boolean isPhoneNumberValid = validatePhoneNumber(phoneNumber);
 
-        // Display results based on validation
-        if (isEmailValid && isPhoneNumberValid) { // If both are valid
-            System.out.println("Thanks for the mail ID and phone number, Quotation will be sent to this mail ID: " + email);
-        } else if (!isEmailValid) { // If the email is invalid
-            System.out.println("Enter valid email ID");
-        } else if (!isPhoneNumberValid) { // If the phone number is invalid
-            System.out.println("Enter valid phone number");
+            // Display results based on validation
+            if (isEmailValid && isPhoneNumberValid) { // If both are valid
+                System.out.println("Thanks for the mail ID and phone number, Quotation will be sent to this mail ID: " + email);
+            } else if (!isEmailValid) { // If the email is invalid
+                System.out.println("Enter valid email ID");
+            } else if (!isPhoneNumberValid) { // If the phone number is invalid
+                System.out.println("Enter valid phone number");
+            }
+        } catch (Exception e) {
+            System.err.println("An error occurred: " + e.getMessage());
+        } finally {
+            if (scanner != null) {
+                scanner.close();
+            }
         }
-        scanner.close();
     }
 }

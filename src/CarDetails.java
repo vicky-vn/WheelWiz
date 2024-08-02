@@ -77,7 +77,7 @@ public class CarDetails {
                 System.out.println("Year: " + carData.get("Year"));
                 System.out.println("Price: $" + carPrice);
                 System.out.println("Category: " + carCategory);
-                System.out.println("Top URL: " + topUrl);
+                System.out.println("Visit: " + topUrl);
                 System.out.println("------------------------------------------------------------------------------");
                 found = true;
             }

@@ -1,8 +1,9 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 public class AutomobilePriceAnalysis {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         SpellCheck spellChecker = new SpellCheck();
         WordCompletion wc = new WordCompletion();
@@ -16,7 +17,7 @@ public class AutomobilePriceAnalysis {
         // Optionally, load an existing inverted index from CSV (if available)
         invertedIndex.loadInvertedIndexFromCSV(trie);
 
-        SearchFrequency.loadCsvData();
+        SearchFrequency.loadCSVData();
         CarDetails.readCSVsToMap();
 
         Scanner input = new Scanner(System.in);
@@ -38,7 +39,6 @@ public class AutomobilePriceAnalysis {
             boolean isPriceValid = false;
 
             System.out.print("*******************************************************************************************");
-
             System.out.println("\n" +
                     "██╗    ██╗██╗  ██╗███████╗███████╗██╗     ██╗    ██╗██╗███████╗\n" +
                     "██║    ██║██║  ██║██╔════╝██╔════╝██║     ██║    ██║██║╚══███╔╝\n" +
@@ -56,7 +56,7 @@ public class AutomobilePriceAnalysis {
             FrequencyCount.getFrequencyCount();
 
             System.out.print("\nMost Searched : ");
-            SearchFrequency.printTreeByFrequency();
+            SearchFrequency.PrintTreeByFrequency();
 
             PrintStatements.statementCall(PrintStatements.welcomeMsg2);
 
@@ -135,7 +135,7 @@ public class AutomobilePriceAnalysis {
 
                 System.out.print("\n------------------------------------------------------------------------------");
                 System.out.print("\nMost Searched : ");
-                SearchFrequency.printTreeByFrequency();
+                SearchFrequency.PrintTreeByFrequency();
 
                 CarDetails.getDetails(brand, category, price);
 

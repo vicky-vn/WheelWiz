@@ -66,7 +66,7 @@ public class WordCompletion {
 
     private TrieWCKeer trie = new TrieWCKeer();
 
-    public void loadVocabulary(String[] filePaths) throws IOException {
+    public void loadVocabulary(String[] filePaths) {
         for (String filePath : filePaths) {
             try (BufferedReader brKeer = new BufferedReader(new FileReader(filePath))) {
                 String lnKeer;
@@ -79,6 +79,8 @@ public class WordCompletion {
                         }
                     }
                 }
+            } catch (IOException e) {
+                System.err.println("An error occurred while loading vocabulary from the file: " + filePath + ". " + e.getMessage());
             }
         }
     }
@@ -112,23 +114,42 @@ public class WordCompletion {
                         System.out.println((i + 1) + ". " + sggstns.get(i));
                     }
                     System.out.print("Select a suggestion by entering the number: ");
-                    int selection = scnnrKeer.nextInt();
-                    scnnrKeer.nextLine(); // Consume the newline character
+                    try {
+                        int selection = scnnrKeer.nextInt();
+                        scnnrKeer.nextLine(); // Consume the newline character
 
-                    if (selection >= 1 && selection <= sggstns.size()) {
-                        System.out.println("You selected: " + sggstns.get(selection - 1));
-                        running = false; // Exit the loop if a valid selection is made
-                        category = sggstns.get(selection - 1);
-                    } else {
-                        System.out.println("Invalid selection. Please try again.");
+                        if (selection >= 1 && selection <= sggstns.size()) {
+                            System.out.println("You selected: " + sggstns.get(selection - 1));
+                            running = false; // Exit the loop if a valid selection is made
+                            category = sggstns.get(selection - 1);
+                        } else {
+                            System.out.println("Invalid selection. Please try again.");
+                        }
+                    } catch (InputMismatchException e) {
+                        System.out.println("Invalid input. Please enter a number.");
+                        scnnrKeer.nextLine(); // Clear the invalid input
                     }
                 }
             }
             return category;
+        } catch (Exception e) {
+            System.err.println("An error occurred: " + e.getMessage());
+            return "Err"; // Exit if there is an error
         }
-        catch (IOException e) {
-            e.printStackTrace();
-            return "Err"; // Exit if there is an error loading the vocabulary
+    }
+
+    public static void main(String[] args) {
+        WordCompletion wordCompletion = new WordCompletion();
+        Scanner scanner = new Scanner(System.in);
+        try {
+            String category = wordCompletion.wordCompletion(scanner);
+            if (!"Err".equals(category)) {
+                System.out.println("You selected: " + category);
+            }
+        } catch (Exception e) {
+            System.err.println("An unexpected error occurred: " + e.getMessage());
+        } finally {
+            scanner.close();
         }
     }
 }

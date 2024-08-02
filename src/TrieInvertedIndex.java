@@ -23,6 +23,9 @@ public class TrieInvertedIndex {
         TrieNode root = new TrieNode();
 
         public void insert(String word, String url, int count) {
+            if (word == null || word.isEmpty()) {
+                throw new IllegalArgumentException("Input word cannot be null or empty");
+            }
             TrieNode node = root;
             for (char c : word.toCharArray()) {
                 node = node.children.computeIfAbsent(c, k -> new TrieNode());
@@ -31,6 +34,9 @@ public class TrieInvertedIndex {
         }
 
         public Map<String, Integer> search(String word) {
+            if (word == null || word.isEmpty()) {
+                throw new IllegalArgumentException("Input word cannot be null or empty");
+            }
             TrieNode node = root;
             for (char c : word.toCharArray()) {
                 node = node.children.get(c);
@@ -55,6 +61,8 @@ public class TrieInvertedIndex {
                 }
             } catch (IOException exc) {
                 System.err.println("Error occurred in fetching content from URL: " + url + " - " + exc.getMessage());
+            } catch (IllegalArgumentException exc) {
+                System.err.println("Error processing keyword from URL: " + url + " - " + exc.getMessage());
             }
             processedCount++;
             if (processedCount % 10 == 0 || processedCount == totalUrls) {
@@ -75,6 +83,8 @@ public class TrieInvertedIndex {
             }
         } catch (IOException exc) {
             System.err.println("Error occurred in reading inverted index CSV file: " + exc.getMessage());
+        } catch (IllegalArgumentException exc) {
+            System.err.println("Error processing entry in inverted index CSV file: " + exc.getMessage());
         }
     }
 
@@ -85,6 +95,9 @@ public class TrieInvertedIndex {
     }
 
     public String[] extractKeywordsFromText(String varForText) {
+        if (varForText == null || varForText.isEmpty()) {
+            throw new IllegalArgumentException("Input text cannot be null or empty");
+        }
         String[] words = varForText.split("\\W+");
         List<String> keywords = new ArrayList<>();
         for (String word : words) {
@@ -97,7 +110,9 @@ public class TrieInvertedIndex {
     }
 
     private String normalizeKeyword(String keyword) {
-        // Convert to lowercase and take the part before any special character or space
+        if (keyword == null || keyword.isEmpty()) {
+            throw new IllegalArgumentException("Keyword cannot be null or empty");
+        }
         String normalized = keyword.toLowerCase().split("[\\W_]+")[0];
         return normalized;
     }
@@ -139,14 +154,35 @@ public class TrieInvertedIndex {
     }
 
     public void printUrlsForKeyword(String keyword, Trie trie) {
-        Map<String, Integer> urlsForKeyword = trie.search(normalizeKeyword(keyword));
-        if (urlsForKeyword.isEmpty()) {
-            System.out.println("No URLs found for keyword: " + keyword);
-        } else {
-            System.out.println("Keyword: " + keyword);
-            for (Map.Entry<String, Integer> entry : urlsForKeyword.entrySet()) {
-                System.out.println("URL: " + entry.getKey() + ", Occurrences: " + entry.getValue());
+        try {
+            Map<String, Integer> urlsForKeyword = trie.search(normalizeKeyword(keyword));
+            if (urlsForKeyword.isEmpty()) {
+                System.out.println("No URLs found for keyword: " + keyword);
+            } else {
+                System.out.println("Keyword: " + keyword);
+                for (Map.Entry<String, Integer> entry : urlsForKeyword.entrySet()) {
+                    System.out.println("URL: " + entry.getKey() + ", Occurrences: " + entry.getValue());
+                }
             }
+        } catch (IllegalArgumentException exc) {
+            System.err.println("Error searching for keyword: " + exc.getMessage());
         }
+    }
+
+    public static void main(String[] args) {
+        TrieInvertedIndex trieInvertedIndex = new TrieInvertedIndex();
+        Trie trie = new Trie();
+
+        // Load inverted index from CSV (if exists)
+        trieInvertedIndex.loadInvertedIndexFromCSV(trie);
+
+        // Build the inverted index from URLs
+        trieInvertedIndex.buildInvertedIndex(trie);
+
+        // Save the inverted index to CSV
+        trieInvertedIndex.createInvertedIndexCSV(trie);
+
+        // Search for a keyword
+        trieInvertedIndex.printUrlsForKeyword("Mirage", trie); // Replace "example" with your test keyword
     }
 }

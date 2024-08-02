@@ -78,7 +78,7 @@ public class BestDeal {
                 System.out.println("Year: " + cheapestCar.get("Year"));
                 System.out.println("Price: $" + cheapestCar.get("Price"));
                 System.out.println("Category: " + cheapestCar.get("Category"));
-                System.out.println("URL: " + (topUrl != null ? topUrl : "No URL found"));
+                System.out.println("Visit Site: " + (topUrl != null ? topUrl : "No URL found"));
                 System.out.println("-------------------------------------------------------------------------------------------");
             } else {
                 System.out.println("No cars found in the file: " + sourceFile);

@@ -9,18 +9,18 @@ public class SpellCheck {
 
     private Set<String> vocabulary; // Set to store vocabulary words
 
-    // C_o_n_s_t_r_u_c_t_o_r that initializes with a default file if none is provided
+    // Constructor that initializes with a default file if none is provided
     public SpellCheck() {
         this("CarBrands.txt"); // Use default file for car brands
     }
 
-    // C_o_n_s_t_r_u_c_t_o_r that takes a file path to load the vocabulary
+    // Constructor that takes a file path to load the vocabulary
     public SpellCheck(String filePath) {
         vocabulary = new HashSet<>(); // Initialize the vocabulary set
         loadVocabulary(filePath); // Load vocabulary from the specified file
     }
 
-    // calculate_vocab
+    // Method to load vocabulary from a file
     private void loadVocabulary(String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) { // Try to open and read the file
             String line;
@@ -28,7 +28,7 @@ public class SpellCheck {
                 vocabulary.add(line.trim().toLowerCase()); // Add the word to the vocabulary set
             }
         } catch (IOException e) { // Handle any IO exceptions
-            e.printStackTrace();
+            System.err.println("An error occurred while loading vocabulary from the file: " + e.getMessage());
         }
     }
 
@@ -46,14 +46,14 @@ public class SpellCheck {
         return null; // Return null if no close match is found
     }
 
-    // Method_to_cal_Levenshtein_dist_btwn_2_strings
+    // Method to calculate Levenshtein distance between two strings
     private int levenshteinDistance(String a, String b) {
         int[][] dp = new int[a.length() + 1][b.length() + 1]; // Create a DP table
-        for (int i = 0; i <= a.length(); i++) { // Loop through str a
-            for (int j = 0; j <= b.length(); j++) { // Loop through str b
-                if (i == 0) { // If in case str is empty
+        for (int i = 0; i <= a.length(); i++) { // Loop through string a
+            for (int j = 0; j <= b.length(); j++) { // Loop through string b
+                if (i == 0) { // If the first string is empty
                     dp[i][j] = j; // Initialize dp table
-                } else if (j == 0) { // If second string is empty
+                } else if (j == 0) { // If the second string is empty
                     dp[i][j] = i; // Initialize dp table
                 } else { // Calculate minimum cost
                     dp[i][j] = Math.min(dp[i - 1][j - 1]
@@ -94,14 +94,22 @@ public class SpellCheck {
         }
     }
 
-    // main_method_to_spell_check
+    // Main method to run the spell check
     public static void main(String[] args) {
         SpellCheck spellChecker = new SpellCheck(); // Create a spell checker with the default file
-        Scanner scanner = new Scanner(System.in); // Create a scanner to read user input
-        String brand = getBrandFromUser(scanner, spellChecker); // Get a valid brand from the user
-        if (brand != null) { // If a valid brand is obtained
-            System.out.println("You selected: " + brand); // Print the selected brand
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(System.in); // Create a scanner to read user input
+            String brand = getBrandFromUser(scanner, spellChecker); // Get a valid brand from the user
+            if (brand != null) { // If a valid brand is obtained
+                System.out.println("You selected: " + brand); // Print the selected brand
+            }
+        } catch (Exception e) {
+            System.err.println("An error occurred: " + e.getMessage());
+        } finally {
+            if (scanner != null) {
+                scanner.close(); // Close the scanner
+            }
         }
-        scanner.close(); // Close the scanner
     }
 }

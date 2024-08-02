@@ -1,185 +1,188 @@
 import java.io.*;
 import java.util.*;
+// Important Packages
 
-class AVLNode {
-    String key;
-    int frequency;
-    int height;
-    AVLNode left, right;
+class AvLNo {
+    String K; // Key
+    int Fre; // Frequency
+    int he; // Height
+    AvLNo L, R; // L - Left  R - Right
 
-    AVLNode(String d) {
-        key = d;
-        frequency = 1;
-        height = 1;
+    AvLNo(String d) { // AvlNo - AVL Node
+        K = d;
+        Fre = 1;
+        he = 1;
     }
 }
 
-class AVLTree {
-    private AVLNode root;
+class AT {
+    private AvLNo R; // Root
 
-    private int height(AVLNode N) {
-        return N == null ? 0 : N.height;
+    private int varForHeight(AvLNo N) {
+        return N == null ? 0 : N.he;
     }
 
-    private int max(int a, int b) {
+    private int varForMax(int a, int b) {
         return (a > b) ? a : b;
     }
 
-    private AVLNode rightRotate(AVLNode y) {
-        AVLNode x = y.left;
-        AVLNode T2 = x.right;
+    private AvLNo RR(AvLNo varForY) { // RR - Rotate Right
+        AvLNo varForX = varForY.L;
+        AvLNo T2 = varForX.R;
 
-        x.right = y;
-        y.left = T2;
+        varForX.R = varForY;
+        varForY.L = T2;
 
-        y.height = max(height(y.left), height(y.right)) + 1;
-        x.height = max(height(x.left), height(x.right)) + 1;
+        varForY.he = varForMax(varForHeight(varForY.L), varForHeight(varForY.R)) + 1;
+        varForX.he = varForMax(varForHeight(varForX.L), varForHeight(varForX.R)) + 1;
 
-        return x;
+        return varForX;
     }
 
-    private AVLNode leftRotate(AVLNode x) {
-        AVLNode y = x.right;
-        AVLNode T2 = y.left;
+    private AvLNo lR(AvLNo x) { // lR - Left Rotate
+        AvLNo y = x.R;
+        AvLNo T2 = y.L;
 
-        y.left = x;
-        x.right = T2;
+        y.L = x;
+        x.R = T2;
 
-        x.height = max(height(x.left), height(x.right)) + 1;
-        y.height = max(height(y.left), height(y.right)) + 1;
+        x.he = varForMax(varForHeight(x.L), varForHeight(x.R)) + 1; // he - Height
+        y.he = varForMax(varForHeight(y.L), varForHeight(y.R)) + 1;
 
         return y;
     }
 
-    private int getBalance(AVLNode N) {
-        return (N == null) ? 0 : height(N.left) - height(N.right);
+    private int Gb(AvLNo N) { // GB - getBalance
+        return (N == null) ? 0 : varForHeight(N.L) - varForHeight(N.R);
     }
 
-    public void insert(String key) {
-        root = insertRec(root, key);
+    public void in(String key) { // in - Insert
+        R = iNr(R, key);
     }
 
-    private AVLNode insertRec(AVLNode node, String key) {
-        if (node == null) {
-            return (new AVLNode(key));
+    private AvLNo iNr(AvLNo varForNode, String varForKey) { // iNr - InSRec
+        if (varForNode == null) {
+            return (new AvLNo(varForKey));
         }
 
-        if (key.compareTo(node.key) < 0) {
-            node.left = insertRec(node.left, key);
-        } else if (key.compareTo(node.key) > 0) {
-            node.right = insertRec(node.right, key);
+        if (varForKey.compareTo(varForNode.K) < 0) {
+            varForNode.L = iNr(varForNode.L, varForKey);
+        } else if (varForKey.compareTo(varForNode.K) > 0) {
+            varForNode.R = iNr(varForNode.R, varForKey);
         } else {
-            node.frequency++;
-            return node;
+            varForNode.Fre++;
+            return varForNode;
         }
 
-        node.height = 1 + max(height(node.left), height(node.right));
+        varForNode.he = 1 + varForMax(varForHeight(varForNode.L), varForHeight(varForNode.R));
 
-        int balance = getBalance(node);
+        int varForBalance = Gb(varForNode);
 
-        if (balance > 1 && key.compareTo(node.left.key) < 0) {
-            return rightRotate(node);
+        if (varForBalance > 1 && varForKey.compareTo(varForNode.L.K) < 0) {
+            return RR(varForNode);
         }
 
-        if (balance < -1 && key.compareTo(node.right.key) > 0) {
-            return leftRotate(node);
+        if (varForBalance < -1 && varForKey.compareTo(varForNode.R.K) > 0) {
+            return lR(varForNode);
         }
 
-        if (balance > 1 && key.compareTo(node.left.key) > 0) {
-            node.left = leftRotate(node.left);
-            return rightRotate(node);
+        if (varForBalance > 1 && varForKey.compareTo(varForNode.L.K) > 0) {
+            varForNode.L = lR(varForNode.L);
+            return RR(varForNode);
         }
 
-        if (balance < -1 && key.compareTo(node.right.key) < 0) {
-            node.right = rightRotate(node.right);
-            return leftRotate(node);
+        if (varForBalance < -1 && varForKey.compareTo(varForNode.R.K) < 0) {
+            varForNode.R = RR(varForNode.R);
+            return lR(varForNode);
         }
 
-        return node;
+        return varForNode;
     }
 
-    public void inOrder(AVLNode node) {
-        if (node != null) {
-            inOrder(node.left);
-            System.out.println(node.key + " " + node.frequency);
-            inOrder(node.right);
+    public void Io(AvLNo varForNode) { // Io - inOrder
+        if (varForNode != null) {
+            Io(varForNode.L);
+            System.out.println(varForNode.K + " " + varForNode.Fre);
+            Io(varForNode.R);
         }
     }
 
-    public AVLNode getRoot() {
-        return root;
+    public AvLNo gR() { // gR - Get Root
+        return R;
     }
 }
 
 public class SearchFrequency {
-    private static AVLTree avlTree = new AVLTree();
-    private static HashMap<String, Integer> frequencyMap = new HashMap<>();
-    private static final String CSV_FILE_PATH = "sf_dataset.csv";
+    private static AT AvT = new AT(); // AvT - AVL Tree
+    private static HashMap<String, Integer> Fmap = new HashMap<>(); // Fmap - Frequency map
+    private static final String CfP = "sf_dataset.csv"; // CfP - CSV File Path
 
     public static void main(String[] args) {
-        // Load the existing CSV data into the AVL tree
-        loadCsvData();
+        try {
+            loadCSVData();
 
-        // Print the AVL tree in ascending order
-        System.out.println("AVL Tree in Ascending Order:");
-        avlTree.inOrder(avlTree.getRoot());
+            // Print the AVL tree in ascending order
+            System.out.println("AVL Tree in Ascending Order:");
+            AvT.Io(AvT.gR());
 
-        // Print the AVL tree based on the highest searches to least
-        System.out.println("AVL Tree by Frequency:");
-        printTreeByFrequency();
+            // Print the AVL tree based on the highest searches to least
+            System.out.println("AVL Tree by Frequency:");
+            PrintTreeByFrequency();
 
-        // Write updated data back to CSV
-        writeCsvData();
+            // Write updated data back to CSV
+            wCd();
+        } catch (IOException e) {
+            System.err.println("An error occurred: " + e.getMessage());
+        }
     }
 
     public static void addString(String input) {
-        avlTree.insert(input);
-        frequencyMap.put(input, frequencyMap.getOrDefault(input, 0) + 1);
-        writeCsvData();
+        AvT.in(input);
+        Fmap.put(input, Fmap.getOrDefault(input, 0) + 1);
+        try {
+            wCd();
+        } catch (IOException e) {
+            System.err.println("An error occurred while writing to CSV: " + e.getMessage());
+        }
     }
 
-    public static void loadCsvData() {
-        try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
+    public static void loadCSVData() throws IOException { // loadCSVData - loadCsvData
+        try (BufferedReader br = new BufferedReader(new FileReader(CfP))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
                 String key = values[0];
                 int frequency = Integer.parseInt(values[1]);
                 for (int i = 0; i < frequency; i++) {
-                    avlTree.insert(key);
+                    AvT.in(key);
                 }
-                frequencyMap.put(key, frequency);
+                Fmap.put(key, frequency);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
-    public static void writeCsvData() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CSV_FILE_PATH))) {
-            for (Map.Entry<String, Integer> entry : frequencyMap.entrySet()) {
-                bw.write(entry.getKey() + "," + entry.getValue());
-                bw.newLine();
+    public static void wCd() throws IOException { // wCd - writeCsvData
+        try (BufferedWriter varForBW = new BufferedWriter(new FileWriter(CfP))) {
+            for (Map.Entry<String, Integer> entry : Fmap.entrySet()) {
+                varForBW.write(entry.getKey() + "," + entry.getValue());
+                varForBW.newLine();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
-    public static void printTreeByFrequency() {
-        List<Map.Entry<String, Integer>> nodes = new ArrayList<>(frequencyMap.entrySet());
+    public static void PrintTreeByFrequency() { // PrintTreeByFrequency - printTreeByFrequency
+        List<Map.Entry<String, Integer>> nodes = new ArrayList<>(Fmap.entrySet());
         nodes.sort((a, b) -> Integer.compare(b.getValue(), a.getValue()));
 
-        int count = 0;
+        int varForCount = 0;
         for (Map.Entry<String, Integer> entry : nodes) {
-            if (count < 5) {
+            if (varForCount < 5) {
                 System.out.print("| " + entry.getKey() + " => " + entry.getValue() + " | ");
-                count++;
+                varForCount++;
             } else {
                 break;
             }
         }
         System.out.println();
     }
-
 }
